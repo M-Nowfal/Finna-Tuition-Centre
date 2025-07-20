@@ -1,6 +1,6 @@
 import AppContextProvider from "./contexts/AppContextProvider";
-import Routes from "./router/routes";
 import { Toaster } from "sonner";
+import Routes from "./router/Routes";
 
 const App = () => {
   return (

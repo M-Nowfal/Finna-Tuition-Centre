@@ -11,7 +11,7 @@ const ReviewCard = ({ rating, review, name, role }) => {
           "{review}"
         </i>
         <span className="text-xl font-semibold">{name}</span>
-        <span className="text-xl font-semibold text-sky-600">{role}</span>
+        <span className="text-sky-600">{role}</span>
       </div>
     </div>
   );

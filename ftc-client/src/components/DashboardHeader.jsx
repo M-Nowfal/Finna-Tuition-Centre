@@ -1,31 +1,40 @@
-import { Bell, CircleX, GraduationCap, LogOut, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { GraduationCap, Home, LogOut, Menu, User, X } from "lucide-react";
 import Button from "../components/ui/Button";
-import { useState } from "react";
+import Alert from "../components/ui/Alert";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FTCAppContext } from "../contexts/AppContextProvider";
 
-const DashboardHeader = ({ role }) => {
+const DashboardHeader = ({ role, setShowSideBar }) => {
+  const { ftcAuthRole, setFtcAuthRole } = useContext(FTCAppContext);
   const [showUserInfo, setShowUserInfo] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("ftcAuthRole");
+    setFtcAuthRole("guest");
+    navigate("/");
+  };
 
   return (
     <div className="flex items-center justify-between bg-white py-3 md:py-4 px-5 shadow border-b border-gray-200">
       <div className="flex items-center gap-3">
+        <Menu
+          className="size-5 md:size-7 cursor-pointer"
+          onClick={() => setShowSideBar((prev) => !prev)}
+        />
         <GraduationCap className="text-sky-600 size-10" />
-        <span className="text-2xl font-bold">FTC {role.toUpperCase()[0] + role.slice(1)} Dashboard</span>
+        <span className="text-2xl font-bold">
+          FTC {role.toUpperCase()[0] + role.slice(1)} Dashboard
+        </span>
         <div className="bg-sky-100 px-2 rounded-2xl">
-          <p className="hidden sm:block text-sm text-sky-700">{role.toUpperCase()[0] + role.slice(1)} Member</p>
+          <p className="hidden sm:block text-sm text-sky-700">
+            {role.toUpperCase()[0] + role.slice(1)} Member
+          </p>
         </div>
       </div>
-      <div className="hidden md:flex items-center gap-3">
-        <Bell className="text-gray-600" />
-        <span className="font-semibold">Muhammed Nowfal</span>
-        <Link to="/">
-          <Button variant="danger-outlined" size="sm">
-            <LogOut className="size-5 me-3" />
-            Log-Out
-          </Button>
-        </Link>
-      </div>
-      <div className="flex md:hidden">
+      <div className="flex">
         <button
           className="cursor-pointer"
           onClick={() => setShowUserInfo((prev) => !prev)}
@@ -33,25 +42,38 @@ const DashboardHeader = ({ role }) => {
           <User className="bg-sky-200 shadow rounded-full p-2 size-10" />
         </button>
         {showUserInfo && (
-          <div className="absolute top-20 right-5">
-            <button
-              className="cursor-pointer"
-              onClick={() => setShowUserInfo((prev) => !prev)}
-            >
-              <CircleX className="text-red-400 size-5 absolute top-3 right-0" />
-            </button>
-            <div className="p-3 rounded-xl flex flex-col gap-3 bg-gray-50 shadow-md">
-              <strong>Muhammed Nowfal</strong>
-              <Link to="/" className="flex justify-center">
-                <Button variant="outlined" size="sm">
-                  <LogOut className="size-5 me-3" />
-                  Log-Out
-                </Button>
-              </Link>
+          <div className="fixed z-10 inset-0" onClick={() => setShowUserInfo((prev) => !prev)}>
+            <div className="fixed top-20 right-7 z-10">
+              <div className="rounded-xl flex flex-col gap-5 bg-white shadow-md border border-gray-300 p-5">
+                <div className="flex justify-center">
+                  <User className="size-20 bg-gray-300 p-2 text-white rounded-full" />
+                </div>
+                <div className="flex flex-col gap-2 items-center">
+                  <strong className="text-lg">Edit Name</strong>
+                  <span className="font-semibold">{ftcAuthRole}</span>
+                </div>
+                <div className="flex justify-center gap-2">
+                  <Button variant="outlined" size="sm" onClick={() => navigate("/")}>
+                    <Home className="size-4 me-1" />
+                    Home
+                  </Button>
+                  <Button variant="danger-outlined" size="sm" onClick={() => setShowAlert(true)}>
+                    <LogOut className="size-4 me-1" />
+                    Log-Out
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}
       </div>
+      {showAlert && <Alert
+        title="Logout"
+        msg="Are you sure to logut the current session"
+        proceed={logout}
+        btn="Logout"
+        setShowAlert={setShowAlert}
+      />}
     </div>
   );
 };

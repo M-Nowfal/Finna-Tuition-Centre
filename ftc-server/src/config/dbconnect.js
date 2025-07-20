@@ -1,14 +1,12 @@
 import { connect } from "mongoose";
 
-const connectDataBase = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      await connect(process.env.MONGO_URI);
-      resolve("DataBase connected successfully!");
-    } catch (err) {
-      reject(err);
-    }
-  });
+const connectDataBase = async () => {
+  try {
+    await connect(process.env.MONGO_URI);
+    console.log("DataBase connected successfully!");
+  } catch (err) {
+    console.log("Error while connecting to DB", err.message);
+  }
 };
 
 export default connectDataBase;

@@ -6,17 +6,26 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import PageNotFound from "../pages/PageNotFound";
 import Student from "../pages/Student";
 import Satff from "../pages/Satff";
+import Registration from "../pages/Registration";
+import Review from "../pages/Review";
 
 const Routes = () => {
   const routes = createBrowserRouter([
     {
       path: "/",
       element: <HomeLayout />,
-      children: [{ path: "/", element: <Home /> }],
+      children: [
+        { path: "/", element: <Home /> },
+        { path: "/reviews", element: <Review /> }
+      ],
     },
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/register/:role",
+      element: <Registration />,
     },
     {
       path: "/dashboard",

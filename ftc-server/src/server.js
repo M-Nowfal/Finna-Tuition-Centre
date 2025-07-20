@@ -9,19 +9,9 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 // Data Base connection
-/* connectDataBase()
-  .then((message) => {
-    console.log(message);
+connectDataBase();
 
-    // After connected to the data base start the server
-    app.listen(PORT, () => {
-      console.log(`Server is Running at http://localhost/${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  }); */
-
+// Start the server
 app.listen(PORT, () => {
   console.log(`Server is Running at http://localhost/${PORT}`);
 });

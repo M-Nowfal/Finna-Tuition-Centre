@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer id="contact" className="bg-gray-900 text-white py-10">
+    <footer id="contact" className="bg-gray-900 text-white py-10 xl:px-50">
       <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5 mx-5">
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-5">
@@ -28,17 +28,17 @@ const Footer = () => {
             <LinkIcon className="text-emerald-500 size-7" />
             <span className="text-2xl font-bold">Quick Links</span>
           </div>
-          <nav className="flex flex-col gap-3">
+          <nav className="flex flex-col gap-3 text-gray-300">
             <a href="#about">About Us</a>
             <a href="#achievements">Achievements</a>
             <Link to="/login?role=staff">Staff Login</Link>
             <Link to="">Laern More</Link>
           </nav>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col text-gray-300">
           <div className="flex items-center gap-2 mb-5">
             <Contact className="text-red-500 size-7" />
-            <span className="text-2xl font-bold">Contact Info</span>
+            <span className="text-2xl font-bold text-white">Contact Info</span>
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
@@ -55,10 +55,10 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col text-gray-300">
           <div className="flex gap-2 items-center mb-5">
             <Table className="text-amber-400 size-7" />
-            <span className="text-2xl font-bold">Tuition Hours</span>
+            <span className="text-2xl font-bold text-white">Tuition Hours</span>
           </div>
           <div className="flex flex-col gap-3">
             <div className="flex flex-col">

@@ -1,6 +1,5 @@
-import { BookOpen, CircleCheck, Target } from "lucide-react";
+import { BookOpen, CheckCircle, Target } from "lucide-react";
 import AboutCard from "../../components/cards/AboutCard";
-
 
 const About = () => {
   const features = [
@@ -15,7 +14,7 @@ const About = () => {
       description: "Qualified and experienced educators dedicated to student success.",
     },
     {
-      icon: <CircleCheck className="text-sky-600 size-15" />,
+      icon: <CheckCircle className="text-sky-600 size-15" />,
       title: "Proven Results",
       description: "Track record of helping students achieve their academic goals.",
     },

@@ -1,26 +1,26 @@
+import { useEffect, useState } from "react";
 import ReviewCard from "../../components/cards/ReviewCard";
+import Button from "../../components/ui/Button";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-const Reviews = () => {
-  const reviews = [
-    {
-      name: "Mohammed Irfan",
-      role: "Student",
-      review: "FTC transformed my daughter's approach to learning. The personalized attention and quality teaching made all the difference.",
-      rating: 3,
-    },
-    {
-      name: "Mohammed Fariz",
-      role: "Student",
-      review: "The teachers at FTC made complex topics easy to understand. I improved my grades significantly!",
-      rating: 4,
-    },
-    {
-      name: "Asanar Apsal",
-      role: "Student",
-      review: "Professional, caring, and results-driven. FTC is the best investment in my child's education.",
-      rating: 5,
-    },
-  ];
+const Reviews = ({ setHome }) => {
+
+  const [reviews, setReviews] = useState([]);
+
+  const getReviews = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/user/review`);
+      setReviews(res.data.reviews || []);
+    } catch (err) {
+      const error = err.response?.data?.error || err.message;
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getReviews();
+  }, []);
 
   return (
     <section id="reviews" className="py-10">
@@ -34,16 +34,21 @@ const Reviews = () => {
           </p>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {reviews.map((review, index) => (
+          {reviews.map(review => (
             <ReviewCard
-              key={index}
-              rating={review.rating}
+              key={review._id}
+              rating={review.ratings}
               review={review.review}
               name={review.name}
               role={review.role}
             />
           ))}
         </div>
+      </div>
+      <div className="flex justify-center mt-5">
+        <Link to="reviews">
+          <Button variant="outlined" onClick={() => setHome(false)}>All reviews</Button>
+        </Link>
       </div>
     </section>
   );

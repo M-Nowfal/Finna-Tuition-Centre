@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 // staff schema creation
 const staffSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  std: { type: String, required: true, enum: ["9", "10", "11", "12"] },
   phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

@@ -10,12 +10,16 @@ import {
 } from "lucide-react";
 import Button from "../ui/Button";
 import { useState } from "react";
+import { getMonth } from "../../helpers/dateFormat";
 
 const StudentCard = ({
-  _id, name, std, section, roll_no, parent, phone, join_date, feeStatus, feeRupee, feeMonth, attendance,
-  shortName, loading, markAttendance, markFeesPaid, setShowEditStudentForm, setEditingStudentDetails
+  _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, attendance,
+  shortName, loading, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
+  setConfirmFeesPaid, setLastFeeDetails
 }) => {
-  const [paid, setPaid] = useState(feeStatus);
+  const paid = feeMonth;  
+  const currentMonth = (feeMonth == new Date().getMonth() + 1);
+
   const [present, setPresent] = useState(attendance);
 
   return (
@@ -42,7 +46,7 @@ const StudentCard = ({
         </div>
         <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
           <Edit className="text-gray-400 size-4" onClick={() => {
-            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeStatus, feeRupee, feeMonth });
+            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth });
             setShowEditStudentForm(prev => !prev);
           }} />
         </div>
@@ -61,22 +65,22 @@ const StudentCard = ({
       </div>
       <div className="flex items-center gap-2">
         <IndianRupee className="text-gray-400 size-4" />
-        <p className="text-gray-700 text-sm">{feeStatus ? `Last Fee ₹${feeRupee} paid for ${feeMonth}` : `Pending`}</p>
+        <p className="text-gray-700 text-sm">{paid ? `Last Fee ₹${feeRupee} paid for ${getMonth(feeMonth)}` : `Pending`}</p>
       </div>
       <div className="flex gap-2 my-2">
         <div
-          className={`flex ${feeStatus || paid ? "bg-green-200" : "bg-red-100"
+          className={`flex ${(paid && currentMonth) ? "bg-green-200" : "bg-red-100"
             } rounded-full items-center gap-1 px-2 text-sm`}
         >
           <CheckCircle
-            className={`${feeStatus || paid ? "text-green-900" : "text-red-900"
+            className={`${(paid && currentMonth) ? "text-green-900" : "text-red-900"
               } size-3`}
           />
           <p
-            className={`${feeStatus || paid ? "text-green-900" : "text-red-900"
+            className={`${(paid && currentMonth) ? "text-green-900" : "text-red-900"
               } font-semibold text-[12px]`}
           >
-            {feeStatus || paid ? "Fees Paid" : "Pending"}
+            {(paid && currentMonth) ? "Fees Paid" : "Pending"}
           </p>
         </div>
         <div
@@ -107,11 +111,14 @@ const StudentCard = ({
         >
           {loading ? "..." : present ? "Mark Absent" : "Mark Present"}
         </Button>
-        {!paid && <Button
-          variant={paid ? "secondary" : "contained"}
+        {!(paid && currentMonth) && <Button
+          variant={(paid && currentMonth) ? "secondary" : "contained"}
           size="sm"
           className="flex-1"
-          onClick={() => markFeesPaid(_id, (err) => !err && setPaid((prev) => !prev))}
+          onClick={() => {
+            setConfirmFeesPaid(true);
+            setLastFeeDetails({ _id, name, std, section, roll_no, feeMonth, join_date });
+          }}
         >
           {loading ? "Updating..." : "Mark Paid"}
         </Button>}

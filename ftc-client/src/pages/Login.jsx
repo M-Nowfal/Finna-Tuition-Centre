@@ -38,7 +38,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      validation();
       const role = ftcRole.toLowerCase();
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login/${role}`,{ password: credentials.password });
       toast.success(res.data.message);
@@ -57,10 +56,6 @@ const Login = () => {
     const { name, value } = e.target;
     setCredentials((prev) => ({ ...prev, [name]: value }));
     setError("");
-  };
-
-  const validation = () => {
-    
   };
 
   return (

@@ -25,8 +25,8 @@ export const loginAuthentication = async (req, res, next) => {
 // api/staff/registration post-method
 export const registerStaff = async (req, res, next) => {
   try {
-    const { name, phone, password } = req.body;
-    // store staff in data base
+    const { name, phone, email, password } = req.body;
+    // 
     res.status(201).json({ message: "Staff created" });
   } catch (err) {
     next(err);

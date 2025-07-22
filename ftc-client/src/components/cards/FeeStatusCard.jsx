@@ -1,7 +1,10 @@
 import { CircleCheck, CircleX, IndianRupee } from "lucide-react";
 import Button from "../ui/Button";
 
-const FeeStatusCard = ({ name, shortName, roll_no, std, section, feeRupee, paid, phone }) => {
+const FeeStatusCard = ({ _id, name, shortName, roll_no, std, section, feeRupee, feeMonth, phone, join_date, setConfirmFeesPaid, setFeeDetails }) => {
+
+  const paid = (feeMonth == new Date().getMonth() + 1);
+
   return (
     <div className="bg-gray-100 flex w-full rounded-xl p-3">
       <div className="flex w-full items-center">
@@ -35,9 +38,16 @@ const FeeStatusCard = ({ name, shortName, roll_no, std, section, feeRupee, paid,
             {paid ? <CircleCheck className="size-3" /> : <CircleX className="size-3" />}
             {paid ? "Paid" : "Pending"}
           </div>
-          <Button variant="success" size="sm">
+          {!paid ? <Button variant="success" size="sm" onClick={() => {
+            setFeeDetails({
+              _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
+            });
+            setConfirmFeesPaid(true);
+          }}>
             Mark Paid
-          </Button>
+          </Button> : <Button variant="secondary" size="sm">
+            Fees Paid
+          </Button>}
         </div>
       </div>
     </div>

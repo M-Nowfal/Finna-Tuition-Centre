@@ -18,6 +18,7 @@ const Registration = () => {
   const [credentials, setCredentials] = useState({
     name: "",
     phone: "",
+    email: "",
     password: "",
     confirm_pass: "",
   });
@@ -30,7 +31,7 @@ const Registration = () => {
       e.preventDefault();
       validation();
       setLoading(true);
-      const res = axios.post(`${import.meta.env.VITE_API_URL}/${role}/registration`, credentials);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/${role}/registration`, credentials);
       navigate(`/dashboard/${role}`, { state: { role } });
     } catch (err) {
       const error = err.response?.data?.error || err.message;
@@ -114,6 +115,24 @@ const Registration = () => {
                 id="phone"
                 className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
                 placeholder="Enter Phone Number"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="email"
+                className="font-semibold text-sm label-element"
+              >
+                E-Mail
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={credentials.email}
+                onChange={handleInputChange}
+                id="email"
+                className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
+                placeholder="Enter E-Mail"
                 required
               />
             </div>

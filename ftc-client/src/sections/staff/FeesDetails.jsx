@@ -6,6 +6,7 @@ import FeeStatusCard from "../../components/cards/FeeStatusCard";
 import { useEffect } from "react";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
 import axios from "axios";
+import FeePaymentForm from "./FeePaymentForm";
 
 const FeesDetails = () => {
 
@@ -46,12 +47,21 @@ const FeesDetails = () => {
   const [search, setSearch] = useState("");
   const filterByFee = useRef("AllStudents");
   const [selectedStd, setSelectedStd] = useState(9);
+  const currentMonth = new Date().getMonth() + 1;
+  const [confirmFeesPaid, setConfirmFeesPaid] = useState(false);
+  const [feeDetails, setFeeDetails] = useState({
+    _id: "", name: "", std: "", section: "", roll_no: "", 
+    feeMonth: "", join_date: ""
+  });
 
   const getFeeOverviewValues = (students) => {
     const total_student = students.length;
-    const fee_paid = (students.filter(student => student.feeStatus)).length;
-    const fee_pending = (students.filter(student => !student.feeStatus)).length;
-    const revenue = students.reduce((acc, student) => acc + Number(student.feeRupee), 0);
+    const fee_paid = (students.filter(student => student.feeMonth == currentMonth)).length;
+    const fee_pending = (students.filter(student => student.feeMonth != currentMonth)).length;
+    const revenue = students.reduce((acc, student) => {
+      const total = acc + Number(student.feeRupee);
+      return student.feeMonth == currentMonth ? total : acc;
+    }, 0);
     setFeesOverviewsValues(
       { total_student, fee_paid, fee_pending, revenue }
     );
@@ -89,12 +99,12 @@ const FeesDetails = () => {
         break;
       case "FeesPaid":
         setFilteredStudents(students.filter(student => (
-          student.feeStatus
+          student.feeMonth == currentMonth
         )));
         break;
       case "FeesPending":
         setFilteredStudents(students.filter(student => (
-          !student.feeStatus
+          student.feeMonth != currentMonth
         )));
         break;
       default:
@@ -107,8 +117,13 @@ const FeesDetails = () => {
     filterByFee.current = "AllStudents";
   }, [selectedStd]);
 
+  useEffect(() => {
+    getFeeOverviewValues(students);
+    filterStudentsByFee();
+  }, [students]);
+
   return (
-    <div className="p-5">
+    <div className="p-3">
       <div className="flex max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
         {[9, 10, 11, 12].map(std => (
           <Button
@@ -138,7 +153,7 @@ const FeesDetails = () => {
             />
           ))}
         </div>
-        <div className="flex flex-col gap-3 bg-white border border-gray-200 p-3 rounded-xl mx-2">
+        <div className="flex flex-col gap-3 bg-white border border-gray-200 p-3 rounded-xl md:mx-2">
           <div className="md:flex justify-between items-center">
             <div className="flex flex-col">
               <div className="flex gap-1 items-center">
@@ -194,12 +209,17 @@ const FeesDetails = () => {
           {loading && <div className="flex justify-center items-center h-[20vh]">
             <Loader2 className="size-10 text-sky-700 animate-spin" />
           </div>}
-          {filteredStudents.map(({ _id, name, roll_no, std, section, feeRupee, feeStatus, phone }) => (
+          {filteredStudents.map(({ _id, name, roll_no, std, section, feeRupee, feeMonth, phone, join_date }) => (
             <FeeStatusCard
               key={_id}
+              _id={_id}
               name={name} roll_no={roll_no}
-              shortName={firstTwoLettersOfName(name)} std={std} section={section}
-              feeRupee={feeRupee} paid={feeStatus} phone={phone}
+              shortName={firstTwoLettersOfName(name)} std={std} 
+              join_date={join_date}
+              section={section} feeRupee={feeRupee} 
+              feeMonth={feeMonth} phone={phone}
+              setConfirmFeesPaid={setConfirmFeesPaid}
+              setFeeDetails={setFeeDetails}
             />
           ))}
           {students.length === 0 && (
@@ -212,6 +232,17 @@ const FeesDetails = () => {
           )}
         </div>
       </div>
+      {confirmFeesPaid && <FeePaymentForm 
+        _id={feeDetails._id}
+        name={feeDetails.name}
+        std={feeDetails.std}
+        section={feeDetails.section}
+        roll_no={feeDetails.roll_no}
+        feeMonth={feeDetails.feeMonth}
+        join_date={feeDetails.join_date}
+        setConfirmFeesPaid={setConfirmFeesPaid}
+        setStudents={setStudents}
+      />}
     </div>
   );
 }

@@ -37,7 +37,7 @@ const Overview = () => {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/gettotalstudents`);
       const { students } = res.data || { students: [] };
       const total_student = students.length;
-      const new_this_month = (students.filter(student => student.join_date.split("T")[0].slice(5, 7))).length;
+      const new_this_month = (students.filter(student => student.join_date.split("T")[0].slice(5, 7) == new Date().getMonth() + 1)).length;
       setOverviewValues({
         total_student, new_this_month
       });
@@ -73,7 +73,7 @@ const Overview = () => {
           Welcome back! Here's what's happening at FTC today.
         </p>
       </div>
-      <div className="grid w-full sm:grid-cols-2">
+      <div className="grid w-full sm:grid-cols-2 gap-2 px-2">
         {overviews.map((overview, index) => (
           <OverviewCard
             key={index}
@@ -95,12 +95,12 @@ const Overview = () => {
             Latest student enrollments and updates
           </p>
         </div>
-        {recentStudents.map(({ name, std, feeStatus, join_date }, index) => (
+        {recentStudents.map(({ name, std, feeMonth, join_date }, index) => (
           <RecentStudentCard
             key={index}
             name={name}
             std={std}
-            feeStatus={feeStatus}
+            feeMonth={feeMonth}
             join_date={join_date.split("T")[0]}
           />
         ))}

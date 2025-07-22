@@ -10,11 +10,7 @@ const studentSchema = new Schema({
   parent: { type: String, required: true },
   phone: { type: String, required: true },
   feeRupee: { type: String },
-  feeStatus: { type: Boolean, default: false },
-  feeMonth: { type: String, enum: [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ] }
+  feeMonth: { type: Number, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] }
 }, { timestamps: true });
 
 // creation of student model

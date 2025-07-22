@@ -3,7 +3,7 @@ const OverviewCard = ({ title, icon, num, msg, i }) => {
   const numColors = ["text-sky-600", "text-emerald-600", "text-red-600", "text-purple-700"];
 
   return (
-    <div className="flex flex-col bg-white gap-3 p-5 mx-3 md:mx-2 border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200">
+    <div className="flex flex-col bg-white gap-3 p-5 border border-gray-200 rounded-xl hover:shadow-lg transition-all duration-200">
       <div className="flex justify-between">
         <p className="font-bold">{title}</p>
         {icon}

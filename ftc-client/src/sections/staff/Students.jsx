@@ -6,6 +6,7 @@ import AddStudentForm from "./AddStudentForm";
 import EditStudent from "./EditStudent";
 import axios from "axios";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
+import FeePaymentForm from "./FeePaymentForm";
 
 const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
 
@@ -16,14 +17,11 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState(students);
   const [editingStudentDetails, setEditingStudentDetails] = useState({
-    name: "",
-    roll_no: "",
-    std: "",
-    section: "",
-    join_date: "",
-    parent: "",
-    phone: "",
-    feeStatus: false,
+    name: "", roll_no: "", std: "", section: "", join_date: "", parent: "", phone: "",
+  });
+  const [confirmFeesPaid, setConfirmFeesPaid] = useState(false);
+  const [lastFeeDetails, setLastFeeDetails] = useState({
+    name: "", std: "", section: "", roll_no: "",feeMonth: "", join_date: ""
   });
   const [selectedStd, setSelectedStd] = useState(9);
 
@@ -61,19 +59,19 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
     }
   };
 
-  const markFeesPaid = async (id, success) => {
-    let flag = null;
-    try {
-      setLoading(true);
-      // API call to mark attendance
-      throw new Error("Network error");
-    } catch (err) {
-      flag = err;
-    } finally {
-      setLoading(false);
-      success(flag);
-    }
-  };
+  // const markFeesPaid = async (student_current_info, success) => {
+  //   let flag = null;
+  //   try {
+  //     setLoading(true);
+
+  //     throw new Error("Network error");
+  //   } catch (err) {
+  //     flag = err;
+  //   } finally {
+  //     setLoading(false);
+  //     success(flag);
+  //   }
+  // };
 
   const handleSearchStudent = (e) => {
     const { value } = e.target;
@@ -88,11 +86,11 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
   };
 
   return (
-    <div className="p-5">
+    <div className="p-3">
       {showStudentAddForm && (
-        <AddStudentForm 
-          setShowStudentAddForm={setShowStudentAddForm} 
-          setStudents={setStudents} 
+        <AddStudentForm
+          setShowStudentAddForm={setShowStudentAddForm}
+          setStudents={setStudents}
           std={selectedStd}
         />
       )}
@@ -150,18 +148,36 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
           <span className="hidden sm:flex text-sm">Add Student</span>
         </Button>
       </div>
+      {/* Confirm Fee */}
+      {confirmFeesPaid && <FeePaymentForm 
+        _id={lastFeeDetails._id}
+        name={lastFeeDetails.name}
+        std={lastFeeDetails.std}
+        section={lastFeeDetails.section}
+        roll_no={lastFeeDetails.roll_no}
+        feeMonth={lastFeeDetails.feeMonth}
+        join_date={lastFeeDetails.join_date}
+        setConfirmFeesPaid={setConfirmFeesPaid}
+        setStudents={setStudents}
+      />}
       <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
-            _id, name, std, section, roll_no, parent, phone, join_date, feeStatus, feeMonth, feeRupee, attendance,
+            _id, name, std, section, roll_no, parent, phone, join_date, feeMonth, feeRupee, attendance,
           }) => (
-            <StudentCard 
-              key={_id} _id={_id} name={name} 
+            <StudentCard
+              key={_id} _id={_id} name={name}
               std={std} section={section} roll_no={roll_no}
-              parent={parent} phone={phone} join_date={join_date.split("T")[0]} 
-              feeStatus={feeStatus} feeRupee={feeRupee} feeMonth={feeMonth} 
-              attendance={attendance} shortName={firstTwoLettersOfName(name)} markAttendance={markAttendance} 
-              markFeesPaid={markFeesPaid} loading={loading} setShowEditStudentForm={setShowEditStudentForm} setEditingStudentDetails={setEditingStudentDetails}
+              parent={parent} phone={phone} join_date={join_date.split("T")[0]}
+              feeRupee={feeRupee} feeMonth={feeMonth}
+              attendance={attendance}
+              loading={loading}
+              shortName={firstTwoLettersOfName(name)}
+              markAttendance={markAttendance}
+              setShowEditStudentForm={setShowEditStudentForm}
+              setEditingStudentDetails={setEditingStudentDetails}
+              setConfirmFeesPaid={setConfirmFeesPaid}
+              setLastFeeDetails={setLastFeeDetails}
             />
           ))
         )}

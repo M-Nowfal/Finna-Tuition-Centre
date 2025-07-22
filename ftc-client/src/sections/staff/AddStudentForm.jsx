@@ -3,7 +3,6 @@ import { useState } from "react";
 import Button from "../../components/ui/Button";
 import axios from "axios";
 import { BouncingDots } from "../../components/ui/Loader";
-import { getMonth } from "../../helpers/dateFormat";
 import { isValidFeeRupee, isValidName, isValidPh, isValidRollNo } from "../../helpers/formValidation";
 import { toast } from "sonner";
 
@@ -16,6 +15,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
     parent: "",
     phone: "",
     feeRupee: "",
+    feeMonth: "",
     feeStatus: false,
   });
   const [loading, setLoading] = useState(false);
@@ -26,15 +26,15 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
       e.preventDefault();
       validation();
       setLoading(true);
+      let details = { ...studentDetails };
       if (studentDetails.feeStatus) {
-        setStudentDetails(prev => (
-          { ...prev, feeMonth: getMonth() }
-        ));
+        const feeMonth = new Date().getMonth() + 1;
+        details.feeMonth = feeMonth;
       }
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/student`, studentDetails);
-      const roll_no = res.data.roll_no;
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/student`, details);
+      const { roll_no, student_id } = res.data;
       setStudents(prev => (
-        [...prev, { ...studentDetails, roll_no }]
+        [...prev, { ...studentDetails, _id: student_id, roll_no, feeMonth: details.feeMonth || "" }]
       ));
       setShowStudentAddForm(false);
       toast.success(res.data.message);

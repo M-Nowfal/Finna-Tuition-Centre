@@ -17,7 +17,7 @@ const Login = () => {
   const [search] = useSearchParams();
   const [ftcRole, setFtcRole] = useState("Student");
   const [viewPassword, setViewPassword] = useState(false);
-  const [credentials, setCredentials] = useState({ reg_no: "", password: "" });
+  const [credentials, setCredentials] = useState({ reg_no: "", password: "", name: "", phone: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-    setCredentials({ reg_no: "", password: "" });
+    setCredentials({ reg_no: "", password: "", name: "", phone: "" });
     setError("");
   }, [ftcRole]);
 
@@ -39,13 +39,21 @@ const Login = () => {
     try {
       e.preventDefault();
       const role = ftcRole.toLowerCase();
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login/${role}`,{ password: credentials.password });
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login/${role}`,
+        { ...credentials }
+      );
+      if (role === "student") {
+        navigate(`/dashboard/${role}`, {
+          state: { role, student: res.data.student },
+        });
+      } else if (role === "staff") {
+        localStorage.setItem("ftcAuthRole", credentials.reg_no);
+        setFtcAuthRole(credentials.reg_no);
+        navigate(`/dashboard/${role}`, {
+          state: { role },
+        });
+      }
       toast.success(res.data.message);
-      localStorage.setItem("ftcAuthRole", credentials.reg_no);
-      setFtcAuthRole(credentials.reg_no);
-      navigate(`/dashboard/${role}`, {
-        state: { role },
-      });
     } catch (err) {
       const error = err.response?.data?.error || err.message;
       setError(error);
@@ -119,7 +127,7 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="flex flex-col gap-2">
+            {ftcRole !== "Student" ? (<div className="flex flex-col gap-2">
               <label
                 htmlFor="password"
                 className="font-semibold text-sm label-element"
@@ -149,7 +157,48 @@ const Login = () => {
                   />
                 )}
               </div>
-            </div>
+            </div>) : (
+              <>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="name"
+                    className="font-semibold text-sm label-element"
+                  >
+                    {ftcRole} Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    autoComplete="name"
+                    value={credentials.name}
+                    onChange={handleInputChange}
+                    id="name"
+                    className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
+                    placeholder={`Enter ${ftcRole} Name`}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label
+                    htmlFor="phone"
+                    className="font-semibold text-sm label-element"
+                  >
+                    {ftcRole} Phone No
+                  </label>
+                  <input
+                    type="text"
+                    name="phone"
+                    autoComplete="mobile email"
+                    value={credentials.phone}
+                    onChange={handleInputChange}
+                    id="phone"
+                    className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
+                    placeholder={`Enter ${ftcRole} Phone Number`}
+                    required
+                  />
+                </div>
+              </>
+            )}
           </div>
           {error && (
             <div className="border border-red-400 p-4 rounded-xl flex gap-3 mb-5">

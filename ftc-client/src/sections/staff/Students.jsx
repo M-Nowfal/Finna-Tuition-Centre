@@ -15,9 +15,9 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
   const [search, setSearch] = useState("");
   const [students, setStudents] = useState([]);
-  const [filteredStudents, setFilteredStudents] = useState(students);
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [editingStudentDetails, setEditingStudentDetails] = useState({
-    name: "", roll_no: "", std: "", section: "", join_date: "", parent: "", phone: "",
+    name: "", roll_no: "", std: "", section: "", join_date: "", parent: "", phone: "", isactive: true
   });
   const [confirmFeesPaid, setConfirmFeesPaid] = useState(false);
   const [lastFeeDetails, setLastFeeDetails] = useState({
@@ -163,7 +163,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
       <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
-            _id, name, std, section, roll_no, parent, phone, join_date, feeMonth, feeRupee, attendance,
+            _id, name, std, section, roll_no, parent, phone, join_date, feeMonth, feeRupee, attendance, isActive
           }) => (
             <StudentCard
               key={_id} _id={_id} name={name}
@@ -178,6 +178,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
               setEditingStudentDetails={setEditingStudentDetails}
               setConfirmFeesPaid={setConfirmFeesPaid}
               setLastFeeDetails={setLastFeeDetails}
+              isActive={isActive}
             />
           ))
         )}

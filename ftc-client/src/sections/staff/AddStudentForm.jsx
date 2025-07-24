@@ -17,6 +17,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
     feeRupee: "",
     feeMonth: "",
     feeStatus: false,
+    isActive: true
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

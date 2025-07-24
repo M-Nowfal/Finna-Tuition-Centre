@@ -15,7 +15,7 @@ import { getMonth } from "../../helpers/dateFormat";
 const StudentCard = ({
   _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, attendance,
   shortName, loading, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
-  setConfirmFeesPaid, setLastFeeDetails
+  setConfirmFeesPaid, setLastFeeDetails, isActive
 }) => {
   const paid = feeMonth;  
   const currentMonth = (feeMonth == new Date().getMonth() + 1);
@@ -24,8 +24,8 @@ const StudentCard = ({
 
   return (
     <div
-      className="flex gap-2 py-5 px-5 flex-col border-l-4 border-l-sky-500 border 
-      border-gray-300 rounded-xl bg-white shadow hover:shadow-xl transition-all duration-200"
+      className={`flex gap-2 py-5 px-5 flex-col border-l-4 border-l-sky-500 border 
+      border-gray-300 rounded-xl bg-white shadow hover:shadow-xl transition-all duration-200 ${!isActive && "opacity-50"}`}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 mb-2">
@@ -46,7 +46,7 @@ const StudentCard = ({
         </div>
         <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
           <Edit className="text-gray-400 size-4" onClick={() => {
-            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth });
+            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive });
             setShowEditStudentForm(prev => !prev);
           }} />
         </div>
@@ -104,7 +104,7 @@ const StudentCard = ({
           variant={present ? "secondary" : "contained"}
           size="sm"
           className="flex-1"
-          disabled={loading}
+          disabled={loading || !isActive}
           onClick={() =>
             markAttendance(_id, (err) => !err && setPresent((prev) => !prev))
           }
@@ -119,6 +119,7 @@ const StudentCard = ({
             setConfirmFeesPaid(true);
             setLastFeeDetails({ _id, name, std, section, roll_no, feeMonth, join_date });
           }}
+          disabled={!isActive}
         >
           {loading ? "Updating..." : "Mark Paid"}
         </Button>}

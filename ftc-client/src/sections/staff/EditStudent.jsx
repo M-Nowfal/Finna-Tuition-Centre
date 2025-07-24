@@ -6,10 +6,10 @@ import { isValidName, isValidPh, isValidRollNo } from "../../helpers/formValidat
 import Alert from "../../components/ui/Alert";
 
 const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudents }) => {
-  const { _id, name, std, section, roll_no, parent, phone, join_date, feeStatus, feeRupee, feeMonth } = editingStudentDetails;
+  const { _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive } = editingStudentDetails;
   const [studentDetails, setStudentDetails] = useState({
     _id, name, roll_no, std, section, join_date,
-    parent, phone, feeStatus, feeRupee, feeMonth
+    parent, phone, feeRupee, feeMonth, isActive
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +20,7 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
       e.preventDefault();
       validation();
       setLoading(true);
-      const res = await axios.put(`${import.meta.env.VITE_API_URL}/staff/update`, studentDetails);
+      await axios.put(`${import.meta.env.VITE_API_URL}/staff/update`, studentDetails);
       setStudents(prev => prev.filter(student => (
         student._id !== studentDetails._id
       )));
@@ -41,17 +41,17 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
   const handleInputChange = (e) => {
     if (loading) return;
     const { name, value } = e.target;
-    if (name !== "feeStatus") {
+    if (name !== "isActive") {
       setStudentDetails((prev) => ({ ...prev, [name]: value }));
     } else {
-      setStudentDetails((prev) => ({ ...prev, [name]: e.target.checked }));
+      setStudentDetails((prev) => ({ ...prev, [name]: !prev.isActive }));
     }
   };
 
   const handleRemoveStudent = async () => {
     try {
       setLoading(true);
-      const res = axios.delete(`${import.meta.env.VITE_API_URL}/staff/student`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/staff/student`, {
         data: { id: studentDetails._id },
         headers: { "Content-Type": "application/json" }
       });
@@ -117,7 +117,7 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
               />
             </div>
             <div className="flex flex-col gap-3">
-              <label htmlFor="roll_no" className={`font-semibold ${!feeStatus && "text-gray-400"} text-sm ms-2`}>
+              <label htmlFor="roll_no" className={`font-semibold ${!feeMonth && "text-gray-400"} text-sm ms-2`}>
                 Roll:No *
               </label>
               <input
@@ -126,9 +126,9 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
                 id="roll_no"
                 value={studentDetails.roll_no}
                 onChange={handleInputChange}
-                className={`rounded-lg outline-1 p-2 ${!feeStatus ? "opacity-30" : "opacity-100"} outline-gray-200`}
+                className={`rounded-lg outline-1 p-2 ${!feeMonth ? "opacity-30" : "opacity-100"} outline-gray-200`}
                 placeholder="Enter Student's Roll:No"
-                disabled={!studentDetails.feeStatus}
+                disabled={!studentDetails.feeMonth}
                 required
               />
             </div>
@@ -179,6 +179,19 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
                 onChange={handleInputChange}
                 className="rounded-lg outline-1 p-2 outline-gray-200"
                 required
+              />
+            </div>
+            <div className="flex items-center gap-3 mt-8">
+              <label htmlFor="isActive" className="font-semibold">
+                Discontinued
+              </label>
+              <input
+                type="checkbox"
+                name="isActive"
+                id="isActive"
+                checked={!studentDetails.isActive}
+                onChange={handleInputChange}
+                className="size-4 accent-green-600 cursor-pointer"
               />
             </div>
           </div>
@@ -237,10 +250,10 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
             >
               Remove Student
             </Button>
-            <Button 
-              variant="contained" 
-              type="submit" 
-              size="sm" 
+            <Button
+              variant="contained"
+              type="submit"
+              size="sm"
               disabled={loading}
             >
               Update Info

@@ -9,7 +9,10 @@ import cors from "cors";
 const app = express();
 
 // Middlewares
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173", "https://finna-tuition-centre-drab.vercel.app"],
+  methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 app.use(express.json());
 
 // Routes

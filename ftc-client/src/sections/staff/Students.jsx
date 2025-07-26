@@ -10,7 +10,6 @@ import FeePaymentForm from "./FeePaymentForm";
 
 const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
 
-  const [isStudentsFetched, setIsStudentsFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
   const [search, setSearch] = useState("");
@@ -27,14 +26,14 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
 
   const getStudents = async () => {
     try {
-      setIsStudentsFetched(true);
+      setLoading(true);
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}`);
       setStudents(res.data.students || []);
     } catch (err) {
       const error = err.response?.data?.error || err.message;
       console.log(error);
     } finally {
-      setIsStudentsFetched(false);
+      setLoading(false);
     }
   };
 
@@ -58,20 +57,6 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
       success(flag);
     }
   };
-
-  // const markFeesPaid = async (student_current_info, success) => {
-  //   let flag = null;
-  //   try {
-  //     setLoading(true);
-
-  //     throw new Error("Network error");
-  //   } catch (err) {
-  //     flag = err;
-  //   } finally {
-  //     setLoading(false);
-  //     success(flag);
-  //   }
-  // };
 
   const handleSearchStudent = (e) => {
     const { value } = e.target;
@@ -171,7 +156,6 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
               parent={parent} phone={phone} join_date={join_date.split("T")[0]}
               feeRupee={feeRupee} feeMonth={feeMonth}
               attendance={attendance}
-              loading={loading}
               shortName={firstTwoLettersOfName(name)}
               markAttendance={markAttendance}
               setShowEditStudentForm={setShowEditStudentForm}
@@ -184,7 +168,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
         )}
       </div>
       {filteredStudents.length === 0 && (
-        isStudentsFetched ? (
+        loading ? (
           <div className="flex justify-center h-[50vh] items-center">
             <Loader2 className="animate-spin size-10 text-sky-700" />
           </div>

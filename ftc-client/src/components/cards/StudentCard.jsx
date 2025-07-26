@@ -14,7 +14,7 @@ import { getMonth } from "../../helpers/dateFormat";
 
 const StudentCard = ({
   _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, attendance,
-  shortName, loading, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
+  shortName, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
   setConfirmFeesPaid, setLastFeeDetails, isActive
 }) => {
   const paid = feeMonth;  
@@ -104,12 +104,12 @@ const StudentCard = ({
           variant={present ? "secondary" : "contained"}
           size="sm"
           className="flex-1"
-          disabled={loading || !isActive}
+          disabled={!isActive}
           onClick={() =>
             markAttendance(_id, (err) => !err && setPresent((prev) => !prev))
           }
         >
-          {loading ? "..." : present ? "Mark Absent" : "Mark Present"}
+          {present ? "Mark Absent" : "Mark Present"}
         </Button>
         {!(paid && currentMonth) && <Button
           variant={(paid && currentMonth) ? "secondary" : "contained"}
@@ -121,7 +121,7 @@ const StudentCard = ({
           }}
           disabled={!isActive}
         >
-          {loading ? "Updating..." : "Mark Paid"}
+          Mark Paid
         </Button>}
       </div>
     </div>

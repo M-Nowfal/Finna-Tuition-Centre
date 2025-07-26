@@ -14,7 +14,7 @@ export const loginAuthentication = async (req, res, next) => {
         if (!staff)
           return res.status(404).json({ error: "No Staff is registered for the given Reg:No" });
         if (await bcryptjs.compare(password, staff.password))
-          return res.status(200).json({ message: "Login Success" });
+          return res.status(200).json({ message: "Login Success", staff });
         return res.status(409).json({ error: "Invalid creadentials, please check your Reg:No and Password" });
       case "student":
         const student = await studentModel.findOne({ roll_no: reg_no, phone, name: { $regex: name, $options: "i" } });

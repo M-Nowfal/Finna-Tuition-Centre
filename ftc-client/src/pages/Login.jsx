@@ -24,9 +24,7 @@ const Login = () => {
   useEffect(() => {
     if (search.get("role") === "staff") setFtcRole("Staff");
     if (ftcAuthRole.includes("STF")) {
-      navigate(`/dashboard/staff`, {
-        state: { role: "staff" },
-      });
+      navigate("/dashboard/staff", { state: { role: "staff" }});
     }
   }, []);
 
@@ -43,15 +41,13 @@ const Login = () => {
         { ...credentials }
       );
       if (role === "student") {
-        navigate(`/dashboard/${role}`, {
-          state: { role, student: res.data.student },
-        });
+        localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.student));
+        setFtcAuthRole(res.data.student);
+        navigate(`/dashboard/${role}`, { state: { role }});
       } else if (role === "staff") {
-        localStorage.setItem("ftcAuthRole", credentials.reg_no);
-        setFtcAuthRole(credentials.reg_no);
-        navigate(`/dashboard/${role}`, {
-          state: { role },
-        });
+        localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.staff));
+        setFtcAuthRole(res.data.staff);
+        navigate(`/dashboard/${role}`, { state: { role }});
       }
       toast.success(res.data.message);
     } catch (err) {

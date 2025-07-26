@@ -1,15 +1,21 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const FTCAppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const storedAuthRole = JSON.parse(localStorage.getItem("ftcAuthRole")) || "FTCGET";
-  const [ftcAuthRole, setFtcAuthRole] = useState(storedAuthRole);
+  
+  const getStoredRole = async () => {
+    const storedAuthRole = await JSON.parse(localStorage.getItem("ftcAuthRole")) || "FTCGET";
+    return storedAuthRole;
+  };
+
+  const [ftcAuthRole, setFtcAuthRole] = useState(getStoredRole());
 
   const contexts = {
     ftcAuthRole,
     setFtcAuthRole,
   };
+
 
   return <FTCAppContext.Provider value={contexts}>
     {children}

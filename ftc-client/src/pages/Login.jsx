@@ -23,7 +23,7 @@ const Login = () => {
 
   useEffect(() => {
     if (search.get("role") === "staff") setFtcRole("Staff");
-    if (ftcAuthRole.includes("STF")) {
+    if (ftcAuthRole?.staff_id?.includes("STF")) {
       navigate("/dashboard/staff", { state: { role: "staff" }});
     }
   }, []);

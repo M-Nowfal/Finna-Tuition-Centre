@@ -42,7 +42,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
   };
 
   return (
-    <div className="fixed flex justify-center items-center inset-0 bg-black/30">
+    <div className="fixed flex z-10 justify-center items-center inset-0 bg-black/30">
       <form onSubmit={handleSubmit} className="flex flex-col bg-white p-7 border border-gray-400 shadow rounded-2xl gap-3 w-[90%] md:w-2xl">
         <div
           className="ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200"
@@ -102,8 +102,9 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             size="sm"
             type="submit"
             className="flex-1"
+            disabled={loading}
           >
-            {loading ? "Submitting" : "Submit"}
+            {loading ? "Submitting" : "Submit"}&nbsp;&nbsp;
             {loading && <BouncingDots />}
           </Button>
           <Button
@@ -111,6 +112,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             size="sm"
             onClick={() => setShowEditStaffForm(false)}
             className="flex-1"
+            disabled={loading}
           >
             Cancel
           </Button>

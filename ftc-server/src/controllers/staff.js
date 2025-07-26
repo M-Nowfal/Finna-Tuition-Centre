@@ -117,9 +117,9 @@ export const feesPayment = async (req, res, next) => {
 export const updateStaff = async (req, res, next) => {
   try {
     const { details, id } = req.body;
-    const updatedDetails = await staffModel.findByIdAndUpdate(id, {
-      ...details
-    });
+    const updatedDetails = await staffModel.findByIdAndUpdate(
+      id, { ...details }, { new: true }
+    );
     res.status(200).json({ message: "Updated successfully!", updatedDetails });
   } catch (err) {
     next(err);

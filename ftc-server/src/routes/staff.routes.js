@@ -2,7 +2,7 @@ import express from "express";
 import {
   addStudent, feesPayment, getAllStudents, getStudent,
   getTotalStudents,
-  recentStudents, removeStudent, updateStudent
+  recentStudents, removeStudent, updateStaff, updateStudent
 } from "../controllers/staff.js";
 import { registerStaff } from "../controllers/auth.js";
 
@@ -17,6 +17,7 @@ router.route("/update").put(updateStudent);
 router.route("/registration").post(registerStaff);
 router.route("/recentstuds").get(recentStudents);
 router.route("/payment").post(feesPayment);
+router.route("/update-stf").put(updateStaff);
 
 // export staff router
 export default router;

@@ -11,10 +11,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { isPwdMatch, isValidName, isValidPh, isValidPwd } from "../helpers/formValidation";
 import axios from "axios";
 import { BouncingDots } from "../components/ui/Loader";
+import Alert from "../components/ui/Alert";
 
 const Registration = () => {
   const { role } = useParams();
   const [viewPassword, setViewPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [credentials, setCredentials] = useState({
     name: "",
     phone: "",
@@ -24,6 +26,7 @@ const Registration = () => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [regNo, setRegNo] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -31,8 +34,9 @@ const Registration = () => {
       e.preventDefault();
       validation();
       setLoading(true);
-      await axios.post(`${import.meta.env.VITE_API_URL}/${role}/registration`, credentials);
-      navigate("/login");
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/${role}/registration`, credentials);
+      setRegNo(res.data.staff_id);
+      setShowAlert(true);
     } catch (err) {
       const error = err.response?.data?.error || err.message;
       setError(error);
@@ -201,6 +205,17 @@ const Registration = () => {
           </div>
         </form>
       </div>
+      {showAlert && <Alert 
+        title="Staff Reg:No"
+        msg="Your permenant staff Reg:No is"
+        proceed={() => {
+          setShowAlert(false);
+          navigate("/login?role=staff");
+        }}
+        btn="Ok"
+        cancel={false}
+        important={regNo}
+      />}
     </div>
   );
 };

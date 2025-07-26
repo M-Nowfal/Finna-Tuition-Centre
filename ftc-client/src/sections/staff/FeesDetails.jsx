@@ -222,7 +222,7 @@ const FeesDetails = () => {
               setFeeDetails={setFeeDetails}
             />
           ))}
-          {students.length === 0 && (
+          {(students.length === 0 && !loading) && (
             <div className="flex justify-center items-center h-[20vh]">
               <div className="flex flex-col items-center gap-5">
                 <Users className="text-gray-300 size-17" />

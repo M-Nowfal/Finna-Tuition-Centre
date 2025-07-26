@@ -12,10 +12,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
 
   return (
     <>
-      <div
-        className={`${showSideBar ? "hidden md:flex" : "hidden"
-          } w-75 min-h-screen flex-col bg-white gap-4 shadow border-r border-gray-200 pt-5`}
-      >
+      <div className={`${showSideBar ? "hidden md:flex" : "hidden"} w-75 min-h-screen flex-col bg-white gap-4 shadow border-r border-gray-200 pt-5`}>
         {sideBarOptions.map((option, index) => (
           <Button
             key={index}
@@ -28,8 +25,9 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
           </Button>
         ))}
       </div>
-      <div className={`${showSideBar ? "md:hidden" : "hidden"} inset-0 z-10 fixed`} onClick={() => setShowSideBar(false)}>
-        <div className={`${showSideBar ? "flex md:hidden" : "hidden"} flex-col fixed bg-white shadow-xl border border-gray-300 p-2 rounded-lg left-5 top-25`}>
+      <>
+        <div className={`${showSideBar ? "md:hidden" : "hidden"} inset-0 z-10 fixed`} onClick={() => setShowSideBar(false)}></div>
+        <div className={`${showSideBar ? "flex md:hidden" : "hidden"} flex-col fixed bg-white shadow-xl border border-gray-300 p-2 rounded-lg left-5 top-25 z-20`}>
           {sideBarOptions.map((option, index) => (
             <Button
               key={index}
@@ -42,7 +40,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
             </Button>
           ))}
         </div>
-      </div>
+      </>
     </>
   );
 };

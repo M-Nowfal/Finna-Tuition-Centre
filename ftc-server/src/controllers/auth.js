@@ -22,7 +22,7 @@ export const loginAuthentication = async (req, res, next) => {
           return res.status(200).json({ message: "Login Success", student });
         return res.status(404).json({ error: "Student not found" });
       case "admin":
-        return res.status(200).json({ message: "Admin panel is not ready yet" });
+        return res.status(400).json({ error: "Admin panel is not ready yet" });
       default:
         return res.status(400).json({ error: "Invalid role" });
     };
@@ -44,7 +44,7 @@ export const registerStaff = async (req, res, next) => {
     await staffModel.create({
       name, phone, email, password: hashedPassword, staff_id
     });
-    return res.status(201).json({ message: "Staff created" });
+    return res.status(201).json({ message: "Staff created", staff_id });
   } catch (err) {
     next(err);
   }

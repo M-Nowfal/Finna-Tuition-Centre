@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 export const FTCAppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
-  const storedAuthRole = localStorage.getItem("ftcAuthRole") || "FTCGET";
+  const storedAuthRole = JSON.parse(localStorage.getItem("ftcAuthRole")) || "FTCGET";
   const [ftcAuthRole, setFtcAuthRole] = useState(storedAuthRole);
 
   const contexts = {

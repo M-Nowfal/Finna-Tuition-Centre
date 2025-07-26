@@ -92,7 +92,7 @@ const Login = () => {
             </p>
           </div>
           <div className="flex justify-center p-1 bg-gray-100 rounded-md">
-            {["Student", "Staff", "Admin"].map((role) => (
+            {["Student", "Staff"].map((role) => (
               <Button
                 key={role}
                 size="sm"

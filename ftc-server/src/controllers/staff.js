@@ -1,3 +1,4 @@
+import staffModel from "../models/staffModel.js";
 import studentModel from "../models/studentModel.js";
 
 // api/staff/getTotalStudents get-method
@@ -105,6 +106,21 @@ export const feesPayment = async (req, res, next) => {
       roll_no: newRollNo
     });
     res.status(200).json({ message: `Fees Paid Successfully for the month ${lastFeeMonth}`, roll_no: newRollNo });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// STAFF Related api's
+
+// api/staff/update-stf put-method 
+export const updateStaff = async (req, res, next) => {
+  try {
+    const { details, id } = req.body;
+    const updatedDetails = await staffModel.findByIdAndUpdate(id, {
+      ...details
+    });
+    res.status(200).json({ message: "Updated successfully!", updatedDetails });
   } catch (err) {
     next(err);
   }

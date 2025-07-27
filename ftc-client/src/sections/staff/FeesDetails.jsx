@@ -209,17 +209,18 @@ const FeesDetails = () => {
           {loading && <div className="flex justify-center items-center h-[20vh]">
             <Loader2 className="size-10 text-sky-700 animate-spin" />
           </div>}
-          {filteredStudents.map(({ _id, name, roll_no, std, section, feeRupee, feeMonth, phone, join_date }) => (
+          {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, phone, join_date, isActive }) => (
             <FeeStatusCard
               key={_id}
               _id={_id}
               name={name} roll_no={roll_no}
               shortName={firstTwoLettersOfName(name)} std={std} 
               join_date={join_date}
-              section={section} feeRupee={feeRupee} 
+              section={section} 
               feeMonth={feeMonth} phone={phone}
               setConfirmFeesPaid={setConfirmFeesPaid}
               setFeeDetails={setFeeDetails}
+              isActive={isActive}
             />
           ))}
           {(students.length === 0 && !loading) && (

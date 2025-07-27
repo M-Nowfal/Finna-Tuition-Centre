@@ -1,13 +1,17 @@
 import { CircleCheck, CircleX, IndianRupee } from "lucide-react";
 import Button from "../ui/Button";
 
-const FeeStatusCard = ({ _id, name, shortName, roll_no, std, section, feeRupee, feeMonth, phone, join_date, setConfirmFeesPaid, setFeeDetails }) => {
+const FeeStatusCard = ({ 
+  _id, name, shortName, roll_no, std, section, feeMonth, 
+  phone, join_date, setConfirmFeesPaid, setFeeDetails, isActive 
+}) => {
 
   const paid = (feeMonth == new Date().getMonth() + 1);
+  const feeRupee = std == "9" ? 900 : 1000;
 
   return (
     <div className="bg-gray-100 flex w-full rounded-xl p-3">
-      <div className="flex w-full items-center">
+      <div className={`flex w-full items-center ${!isActive && "opacity-30"}`}>
         <div className="flex-1 flex items-center gap-3">
           <div className="bg-sky-200 rounded-full p-2.5 font-semibold text-lg text-sky-950">
             {shortName}
@@ -30,7 +34,7 @@ const FeeStatusCard = ({ _id, name, shortName, roll_no, std, section, feeRupee, 
           <div className="flex flex-col">
             <div className="flex items-center">
               <IndianRupee className="size-3" />
-              <span className="text-xl font-semibold">{feeRupee || 0}</span>
+              <span className="text-xl font-semibold">{feeRupee}</span>
             </div>
             <span className="hidden sm:block text-xs text-gray-500">Monthly Fee</span>
           </div>
@@ -38,12 +42,15 @@ const FeeStatusCard = ({ _id, name, shortName, roll_no, std, section, feeRupee, 
             {paid ? <CircleCheck className="size-3" /> : <CircleX className="size-3" />}
             {paid ? "Paid" : "Pending"}
           </div>
-          {!paid ? <Button variant="success" size="sm" onClick={() => {
-            setFeeDetails({
-              _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
-            });
-            setConfirmFeesPaid(true);
-          }}>
+          {!paid ? <Button variant="success" size="sm" 
+            onClick={() => {
+              setFeeDetails({
+                _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
+              });
+              setConfirmFeesPaid(true);
+              }}
+            disabled={!isActive}
+            >
             Mark Paid
           </Button> : <Button variant="secondary" size="sm">
             Fees Paid

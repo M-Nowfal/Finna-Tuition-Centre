@@ -110,7 +110,7 @@ const Overview = () => {
           </div>
         )}
       </div>
-      {recentStudents.length === 0 && <div className="flex justify-center">
+      {(recentStudents.length === 0 && !loading) && <div className="flex justify-center">
         <span className="text-xl font-semibold">No Students joined yet</span>
       </div>}
     </div>

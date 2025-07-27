@@ -11,14 +11,17 @@ const Header = ({ home }) => {
         <span className="text-2xl font-bold">Finna Tuition Centre</span>
       </div>
       {home && <nav className="hidden md:flex items-center gap-5 lg:gap-10">
-        <a href="#about">About</a>
-        <a href="#achievements">Achievements</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#contact">Contact</a>
+        <a href="#about" className="hover:text-sky-600">About</a>
+        <a href="#achievements" className="hover:text-sky-600">Achievements</a>
+        <a href="#reviews" className="hover:text-sky-600">Reviews</a>
+        <a href="#contact" className="hover:text-sky-600">Contact</a>
       </nav>}
       <div>
         <Link to="/login">
-          <Button variant="contained">Login</Button>
+          <Button 
+            variant="contained"
+            size="sm"
+          >Login</Button>
         </Link>
       </div>
     </header>

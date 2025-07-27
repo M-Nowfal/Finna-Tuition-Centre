@@ -11,6 +11,7 @@ const studentSchema = new Schema({
   phone: { type: String, required: true },
   feeRupee: { type: String },
   feeMonth: { type: Number, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
+  feePaidDate: { type: String },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 

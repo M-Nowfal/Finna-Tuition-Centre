@@ -5,6 +5,7 @@ import axios from "axios";
 import { BouncingDots } from "../../components/ui/Loader";
 import { isValidFeeRupee, isValidName, isValidPh, isValidRollNo } from "../../helpers/formValidation";
 import { toast } from "sonner";
+import { getMonth } from "../../helpers/dateFormat";
 
 const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
   const [studentDetails, setStudentDetails] = useState({
@@ -243,7 +244,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
               required={studentDetails.feeRupee}
             />
             <label htmlFor="feeStatus" className="font-semibold">
-              Fees paid for current month
+              Fees paid for current month {getMonth(new Date().getMonth() + 1)}
             </label>
           </div>
           {error && (
@@ -253,18 +254,25 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
             </div>
           )}
           <hr className="mb-5 mt-4 text-gray-300" />
-          <div className="flex justify-end gap-7">
+          <div className="flex flex-col sm:flex-row-reverse justify-end gap-3">
+            <Button 
+              variant="contained" 
+              type="submit" 
+              size="sm" 
+              className="flex-1" 
+              disabled={loading}
+            >
+              {loading ? "Submitting" : "Submit"}
+              {loading && <BouncingDots />}
+            </Button>
             <Button
               variant="danger-outlined"
               size="sm"
+              className="flex-1"
               onClick={() => setShowStudentAddForm(false)}
               disabled={loading}
             >
               Cancel
-            </Button>
-            <Button variant="contained" type="submit" size="sm" className="flex gap-2" disabled={loading}>
-              {loading ? "Submitting" : "Submit"}
-              {loading && <BouncingDots />}
             </Button>
           </div>
         </form>

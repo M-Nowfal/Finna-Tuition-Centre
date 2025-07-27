@@ -11,12 +11,13 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
   const lastFeeMonth = feeMonth ? getMonth(feeMonth + 1) : getMonth(join_date.slice(5, 7));
   const [feeRupee, setFeeRupee] = useState(std == 9 ? 900 : 1000);
   const [loading, setLoading] = useState(false);
+  const [feePaidDate, setFeePaidDate] = useState(new Date().toLocaleDateString().replaceAll("/", "-"));
 
   const handleProceed = async (e) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee };
+      const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee, feePaidDate };
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/payment`, feeDetails);
       setStudents(prev => prev.map(student => (
         student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth) } : student
@@ -33,7 +34,7 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
 
   return (
     <div className="flex fixed z-10 inset-0 bg-black/30 justify-center items-center">
-      <form onSubmit={handleProceed} className="bg-white border max-w-2xl mx-2 border-gray-400 rounded-xl p-5 ">
+      <form onSubmit={handleProceed} className="bg-white border sm:min-w-xl lg:min-w-2xl mx-2 border-gray-400 rounded-xl p-5 ">
         <div
           className="w-fit ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200 mb-2"
           role="button"
@@ -55,6 +56,7 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
               id="name"
               value={name}
               className="rounded-lg outline-1 p-2 outline-gray-200"
+              autoComplete="off"
               readOnly
             />
           </div>
@@ -91,32 +93,45 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
               readOnly
             />
           </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="lastfeemonth" className="font-semibold text-sm ms-2">Fees Paying Month *</label>
+            <input
+              type="text"
+              name="lastfeemonth"
+              id="lastfeemonth"
+              value={lastFeeMonth}
+              className="rounded-lg outline-1 p-2 outline-gray-200"
+              readOnly
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="feeRupee" className="font-semibold text-sm ms-2">Fee Amount *</label>
+            <input
+              type="number"
+              name="feeRupee"
+              id="feeRupee"
+              value={feeRupee}
+              onChange={(e) => setFeeRupee(e.target.value)}
+              min={500}
+              max={1500}
+              required
+              className="rounded-lg outline-1 p-2 outline-gray-200"
+            />
+          </div>
         </div>
-        <div className="flex flex-col gap-2 mt-4">
-          <label htmlFor="lastfeemonth" className="font-semibold text-sm ms-2">Fees Paying Month *</label>
+        <div className="flex flex-col gap-2 mt-5">
+          <label htmlFor="feePaidDate" className="font-semibold text-sm ms-2">Date *</label>
           <input
             type="text"
-            name="lastfeemonth"
-            id="lastfeemonth"
-            value={lastFeeMonth}
+            name="feePaidDate"
+            id="feePaidDate"
+            value={feePaidDate}
             className="rounded-lg outline-1 p-2 outline-gray-200"
-            readOnly
-          />
-        </div>
-        <div className="flex flex-col gap-2 mt-4">
-          <label htmlFor="feeRupee" className="font-semibold text-sm ms-2">Fee Amount *</label>
-          <input
-            type="number"
-            name="feeRupee"
-            id="feeRupee"
-            value={feeRupee}
-            onChange={(e) => setFeeRupee(e.target.value)}
-            min={500}
-            max={1500}
+            onChange={(e) => setFeePaidDate(e.target.value)}
             required
-            className="rounded-lg outline-1 p-2 outline-gray-200"
           />
         </div>
+
         <div className="flex flex-col mt-5 gap-2">
           <Button variant="success" size="sm" className="flex-1 gap-2" type="submit" disabled={loading}>
             {loading ? "Processing" : "Proceed"}

@@ -1,14 +1,6 @@
 import reviewModel from "../models/reviewMode.js";
 
-export const getReviews = async (_req, res, next) => {
-  try {
-    const reviews = await reviewModel.find({ ratings: { $gt: 4 } }).limit(4);
-    res.status(200).json({ message: "Reviews", reviews });
-  } catch (err) {
-    next(err);
-  }
-};
-
+// api/user/allreviews get-method
 export const getAllReviews = async (_req, res, next) => {
   try {
     const reviews = await reviewModel.find();
@@ -18,6 +10,17 @@ export const getAllReviews = async (_req, res, next) => {
   }
 }
 
+// api/user/review get-method
+export const getReviews = async (_req, res, next) => {
+  try {
+    const reviews = await reviewModel.find({ ratings: { $gte: 4 } }).limit(5);
+    res.status(200).json({ message: "Reviews", reviews });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// api/user/review post-method
 export const addReview = async (req, res, next) => {
   try {
     const review = req.body;

@@ -43,7 +43,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
 
   return (
     <div className="fixed flex z-10 justify-center items-center inset-0 bg-black/30">
-      <form onSubmit={handleSubmit} className="flex flex-col bg-white p-7 border border-gray-400 shadow rounded-2xl gap-3 w-[90%] md:w-2xl">
+      <form onSubmit={handleSubmit} className="flex flex-col bg-white p-5 border border-gray-400 shadow rounded-2xl gap-3 w-[95%] md:w-2xl">
         <div
           className="ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200"
           role="button"
@@ -64,6 +64,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             id="name"
             value={details.name}
             onChange={handleInputChange}
+            autoComplete="name"
             className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
           />
         </div>
@@ -75,6 +76,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             id="phone"
             value={details.phone}
             onChange={handleInputChange}
+            autoComplete="mobile email"
             className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
           />
         </div>
@@ -86,6 +88,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             id="email"
             value={details.email}
             onChange={handleInputChange}
+            autoComplete="email"
             className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
           />
         </div>

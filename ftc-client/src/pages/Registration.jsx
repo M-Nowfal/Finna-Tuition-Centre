@@ -101,6 +101,7 @@ const Registration = () => {
                 id="name"
                 className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
                 placeholder="Enter Name"
+                autoComplete="name"
                 required
               />
             </div>
@@ -119,6 +120,7 @@ const Registration = () => {
                 id="phone"
                 className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
                 placeholder="Enter Phone Number"
+                autoComplete="mobile email"
                 required
               />
             </div>
@@ -137,6 +139,7 @@ const Registration = () => {
                 id="email"
                 className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
                 placeholder="Enter E-Mail"
+                autoComplete="email"
                 required
               />
             </div>

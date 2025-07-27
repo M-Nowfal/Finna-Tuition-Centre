@@ -241,23 +241,37 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
             </div>
           )}
           <hr className="mb-5 mt-4 text-gray-300" />
-          <div className="flex justify-end gap-7">
-            <Button
-              variant="danger-outlined"
-              size="sm"
-              onClick={() => setShowAlert(true)}
-              disabled={loading}
-            >
-              Remove Student
-            </Button>
+          <div className="flex flex-col justify-end gap-5">
             <Button
               variant="contained"
               type="submit"
               size="sm"
               disabled={loading}
+              className="flex-1"
             >
               Update Info
             </Button>
+            <div className="flex flex-col sm:flex-row-reverse gap-2">
+              <Button
+                variant="danger-outlined"
+                size="sm"
+                onClick={() => setShowEditStudentForm(false)}
+                disabled={loading}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <hr className="mb-5 mt-4 text-gray-300 sm:hidden" />
+              <Button
+                variant="danger"
+                size="sm"
+                onClick={() => setShowAlert(true)}
+                disabled={loading}
+                className="flex-1"
+              >
+                Remove Student
+              </Button>
+            </div>
           </div>
         </form>
       </div>

@@ -5,11 +5,11 @@ import { toast } from "sonner";
 import axios from "axios";
 import { BouncingDots } from "../../components/ui/Loader";
 
-const ReviewForm = ({ setShowAddReviewForm }) => {
-  
+const ReviewForm = ({ setShowAddReviewForm, setReviews }) => {
+
   const [ratings, setRatings] = useState(2);
   const [review, setReview] = useState({
-    name: "", review: "", role: "Parent", ratings
+    name: "", review: "", role: "Parent"
   });
   const [loading, setLoading] = useState(false);
 
@@ -17,8 +17,12 @@ const ReviewForm = ({ setShowAddReviewForm }) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/review`, review);
-
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/user/review`, { ...review, ratings: ratings - 1 });
+      setReviews(prev => [
+        ...prev, { ...review, ratings: ratings - 1 }
+      ]);
+      toast.success(res.data.message);
+      setShowAddReviewForm(false);
     } catch (err) {
       const error = err.response?.data?.error || err.message;
       toast.error(error);
@@ -95,18 +99,22 @@ const ReviewForm = ({ setShowAddReviewForm }) => {
             <span className="font-semibold text-sm ms-2">Ratings *</span>
             <div className="flex ms-2">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} className={star < ratings ? "fill-amber-400 text-amber-500" : "text-gray-500"} onClick={() => setRatings(star + 1)} />
+                <Star
+                  key={star}
+                  className={star < ratings ? "fill-amber-400 text-amber-500" : "text-gray-500"}
+                  onClick={() => setRatings(star + 1)}
+                />
               ))}
             </div>
           </div>
           <div className="flex flex-col sm:flex-row-reverse gap-3 justify-center">
-            <Button variant="contained" size="sm" 
-              type="submit" disabled={loading} 
+            <Button variant="contained" size="sm"
+              type="submit" disabled={loading}
               className="flex-1"
             >{loading ? "Submitting" : "Submit"}&nbsp;&nbsp;{loading && <BouncingDots />}</Button>
-            <Button 
-              variant="outlined" size="sm" 
-              onClick={() => setShowAddReviewForm(false)} className="flex-1" 
+            <Button
+              variant="outlined" size="sm"
+              onClick={() => setShowAddReviewForm(false)} className="flex-1"
               disabled={loading}
             >Cancel</Button>
           </div>

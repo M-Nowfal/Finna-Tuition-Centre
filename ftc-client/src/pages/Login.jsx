@@ -25,6 +25,8 @@ const Login = () => {
     if (search.get("role") === "staff") setFtcRole("Staff");
     if (ftcAuthRole?.staff_id?.includes("STF")) {
       navigate("/dashboard/staff", { state: { role: "staff" }});
+    } else if (ftcAuthRole?.roll_no?.includes("FTC")) {
+      navigate("/dashboard/student", { state: { role: "student", student: ftcAuthRole }});
     }
   }, []);
 
@@ -43,7 +45,7 @@ const Login = () => {
       if (role === "student") {
         localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.student));
         setFtcAuthRole(res.data.student);
-        navigate(`/dashboard/${role}`, { state: { role }});
+        navigate(`/dashboard/${role}`, { state: { role, student: res.data.student }});
       } else if (role === "staff") {
         localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.staff));
         setFtcAuthRole(res.data.staff);

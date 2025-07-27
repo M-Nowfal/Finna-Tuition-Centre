@@ -33,10 +33,11 @@ const Review = () => {
         <PenLine className="text-emerald-500" />
         <span className="font-semibold text-2xl">All reviews</span>
       </div>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {reviews.map(review => (
+      <span className="text-gray-700">Total Reviews : {reviews.length}</span>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
+        {reviews.map((review, i) => (
           <ReviewCard
-            key={review._id}
+            key={i}
             rating={review.ratings}
             review={review.review}
             name={review.name}
@@ -48,10 +49,13 @@ const Review = () => {
         <Button variant="contained" size="sm" onClick={() => setShowAddReviewForm(true)}>Add a Review</Button>
         <Button variant="outlined" size="sm" onClick={() => {
           setHome(true);
-          navigate("/"); 
+          navigate("/");
         }}>Home</Button>
       </div>
-      {showAddReviewForm && <ReviewForm setShowAddReviewForm={setShowAddReviewForm} />}
+      {showAddReviewForm && <ReviewForm
+        setShowAddReviewForm={setShowAddReviewForm}
+        setReviews={setReviews}
+      />}
     </div>
   );
 }

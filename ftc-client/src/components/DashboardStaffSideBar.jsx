@@ -26,7 +26,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
         ))}
       </div>
       <>
-        <div className={`${showSideBar ? "md:hidden" : "hidden"} inset-0 z-10 fixed`} onClick={() => setShowSideBar(false)}></div>
+        <div className={`${showSideBar ? "md:hidden" : "hidden"} inset-0 z-15 fixed`} onClick={() => setShowSideBar(false)}></div>
         <div className={`${showSideBar ? "flex md:hidden" : "hidden"} flex-col fixed bg-white shadow-xl border border-gray-300 p-2 rounded-lg left-5 top-25 z-20`}>
           {sideBarOptions.map((option, index) => (
             <Button

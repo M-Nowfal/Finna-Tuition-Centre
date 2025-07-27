@@ -19,6 +19,8 @@ const DashboardHeader = ({ role, setShowSideBar }) => {
     navigate("/");
   };
 
+  const staff = ftcAuthRole?.staff_id?.includes("STF");
+
   return (
     <div className="flex items-center justify-between bg-white py-3 md:py-4 px-5 shadow border-b border-gray-200">
       <div className="flex items-center gap-3">
@@ -48,7 +50,7 @@ const DashboardHeader = ({ role, setShowSideBar }) => {
             <div className="fixed z-10 inset-0" onClick={() => setShowUserInfo((prev) => !prev)}></div>
             <div className="fixed top-20 right-7 z-20">
               <div className="rounded-xl flex flex-col gap-5 bg-white shadow-md border border-gray-300 p-5">
-                <div 
+                {staff && <div 
                   className="ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200"
                   role="button"
                   onClick={() => {
@@ -57,22 +59,32 @@ const DashboardHeader = ({ role, setShowSideBar }) => {
                   }}
                 >
                   <Edit className="text-gray-500" />
-                </div>
+                </div>}
                 <div className="flex justify-center">
                   <User className="size-22 bg-gray-300 p-2 text-white rounded-full" />
                 </div>
                 <div className="flex flex-col gap-2 items-center">
-                  <strong className="text-lg">{ftcAuthRole.name}</strong>
-                  <span className="font-semibold">{ftcAuthRole.staff_id}</span>
-                  <p className="text-gray-900">{ftcAuthRole.phone}</p>
-                  <p className="text-sky-600">{ftcAuthRole.email}</p>
+                  <strong className="text-lg">{ftcAuthRole?.name}</strong>
+                  <span className="font-semibold">{ftcAuthRole?.staff_id || ftcAuthRole?.roll_no}</span>
+                  <p className="text-gray-900">{ftcAuthRole?.phone}</p>
+                  <p className="text-sky-600">{ftcAuthRole?.email}</p>
                 </div>
                 <div className="flex justify-center gap-2">
-                  <Button variant="outlined" size="sm" onClick={() => navigate("/")}>
+                  <Button 
+                    variant="outlined" 
+                    size="sm" 
+                    onClick={() => navigate("/")}
+                    className="flex-1"
+                  >
                     <Home className="size-4 me-1" />
                     Home
                   </Button>
-                  <Button variant="danger-outlined" size="sm" onClick={() => setShowAlert(true)}>
+                  <Button 
+                    variant="danger-outlined" 
+                    size="sm" 
+                    onClick={() => setShowAlert(true)}
+                    className="flex-1"  
+                  >
                     <LogOut className="size-4 me-1" />
                     Log-Out
                   </Button>

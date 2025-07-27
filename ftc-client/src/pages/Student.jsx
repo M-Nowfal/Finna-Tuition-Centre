@@ -6,19 +6,18 @@ const Student = () => {
   const { student } = useLocation().state || { student: {} };
 
   const student_details = [
-    { label: "Name", value: student.name },
-    { label: "Roll No", value: student.roll_no },
-    { label: "Join Date", value: student.join_date.split("T")[0] },
-    { label: "Class", value: student.std },
-    { label: "Section", value: student.section },
-    { label: "Phone", value: student.phone },
-    { label: "Parent", value: student.parent },
-    { label: "Last Fee Month", value: student.feeMonth },
-    { label: "Fee Amount", value: `₹${student.feeRupee}` }
+    { label: "Join Date", value: student?.join_date.split("T")[0] },
+    { label: "Class", value: student?.std },
+    { label: "Section", value: student?.section },
+    { label: "Phone", value: student?.phone },
+    { label: "Parent", value: student?.parent },
+    { label: "Last Fee Month", value: student?.feeMonth },
+    { label: "Fee Amount", value: `₹${student?.feeRupee}` },
+    { label: "Fee Paid Date", value: student?.feePaidDate }
   ];
 
   return (
-    <div className="min-h-[90vh] flex flex-col items-center justify-center p-4 bg-gray-50">
+    <div className="min-h-[90vh] flex flex-col items-center justify-center p-4 bg-gray-50 mb-10">
       <Link
         to="/"
         className="flex items-center me-auto gap-2 text-sky-500 hover:text-sky-600 transition-colors mb-6 lg:mb-8"
@@ -32,7 +31,10 @@ const Student = () => {
             <div className="bg-white/20 p-3 rounded-full">
               <User className="size-8 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white">Student Profile</h1>
+            <div className="flex flex-col">
+              <h1 className="text-2xl font-bold text-white">{student?.name}</h1>
+              <h1 className="text-2xl font-bold text-white">{student?.roll_no}</h1>
+            </div>
           </div>
 
           <div className="p-6 md:p-8">
@@ -44,7 +46,7 @@ const Student = () => {
                   </label>
                   <div className="p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <span className="text-lg font-semibold text-gray-800">
-                      {i === 7 ? getMonth(detail.value) : detail.value || "N/A"}
+                      {i === 5 ? getMonth(detail.value) : detail.value || "N/A"}
                     </span>
                   </div>
                 </div>
@@ -54,7 +56,7 @@ const Student = () => {
 
           <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Last updated: {student.updatedAt.split("T")[0]}
+              Last updated: {student?.updatedAt.split("T")[0]}
             </p>
           </div>
         </div>

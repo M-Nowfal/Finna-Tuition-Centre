@@ -1,6 +1,7 @@
 import studentModel from "../models/studentModel.js";
 import staffModel from "../models/staffModel.js";
 import bcryptjs from "bcryptjs";
+import isValidStaffNumber from "../helpers/checkStaff.js";
 
 // api/auth/login/:role
 export const loginAuthentication = async (req, res, next) => {
@@ -35,7 +36,9 @@ export const loginAuthentication = async (req, res, next) => {
 export const registerStaff = async (req, res, next) => {
   try {
     const { name, phone, email, password } = req.body;
-    const staff = await staffModel.findOne({ phone, email });
+    if (!isValidStaffNumber(phone))
+      return res.status(409).json({ error: "You are not allowed to register as Staff" })
+    const staff = await staffModel.findOne({ $or: [{ phone }, { email }] });
     if (staff)
       return res.status(401).json({ error: "Staff already exist with that email or phone" });
     const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));

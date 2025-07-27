@@ -262,7 +262,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
               className="flex-1" 
               disabled={loading}
             >
-              {loading ? "Submitting" : "Submit"}
+              {loading ? "Submitting" : "Submit"}&nbsp;&nbsp;
               {loading && <BouncingDots />}
             </Button>
             <Button

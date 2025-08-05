@@ -45,12 +45,12 @@ const FeesDetails = () => {
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
-  const filterByFee = useRef("AllStudents");
+  const [filterByFee, setFilterByFee] = useState("AllStudents");
   const [selectedStd, setSelectedStd] = useState(9);
   const currentMonth = new Date().getMonth() + 1;
   const [confirmFeesPaid, setConfirmFeesPaid] = useState(false);
   const [feeDetails, setFeeDetails] = useState({
-    _id: "", name: "", std: "", section: "", roll_no: "", 
+    _id: "", name: "", std: "", section: "", roll_no: "",
     feeMonth: "", join_date: ""
   });
 
@@ -92,8 +92,8 @@ const FeesDetails = () => {
     )));
   };
 
-  const filterStudentsByFee = () => {
-    switch (filterByFee.current) {
+  const filterStudentsByFee = (filter) => {
+    switch (filter) {
       case "AllStudents":
         setFilteredStudents(students);
         break;
@@ -107,6 +107,13 @@ const FeesDetails = () => {
           student.feeMonth != currentMonth
         )));
         break;
+      case "DueToday":
+        setFilteredStudents(students.filter(student => {
+          const date = student.join_date.split("T")[0].slice(8);
+          const today = new Date().getDate().toString().padStart(2, "0");
+          return date === today;
+        }));
+        break;
       default:
         setFilteredStudents(students);
     }
@@ -114,7 +121,7 @@ const FeesDetails = () => {
 
   useEffect(() => {
     getStudents();
-    filterByFee.current = "AllStudents";
+    setFilterByFee("AllStudents");
   }, [selectedStd]);
 
   useEffect(() => {
@@ -195,34 +202,37 @@ const FeesDetails = () => {
               name="feesFilter"
               id="feesFilter"
               className="border border-gray-300 bg-white text-sm rounded-md py-3 mt-1 ps-2"
-              value={filterByFee.current}
+              value={filterByFee}
               onChange={(e) => {
-                filterByFee.current = e.target.value;
-                filterStudentsByFee();
+                setFilterByFee(e.target.value);
+                filterStudentsByFee(e.target.value);
               }}
             >
               <option value="AllStudents">All Students</option>
               <option value="FeesPaid">Fees Paid</option>
               <option value="FeesPending">Fees Pending</option>
+              <option value="DueToday">Fees Due Today</option>
             </select>
           </div>
           {loading && <div className="flex justify-center items-center h-[20vh]">
             <Loader2 className="size-10 text-sky-700 animate-spin" />
           </div>}
-          {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, phone, join_date, isActive }) => (
-            <FeeStatusCard
-              key={_id}
-              _id={_id}
-              name={name} roll_no={roll_no}
-              shortName={firstTwoLettersOfName(name)} std={std} 
-              join_date={join_date}
-              section={section} 
-              feeMonth={feeMonth} phone={phone}
-              setConfirmFeesPaid={setConfirmFeesPaid}
-              setFeeDetails={setFeeDetails}
-              isActive={isActive}
-            />
-          ))}
+          <div className="grid xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+            {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, phone, join_date, isActive }) => (
+              <FeeStatusCard
+                key={_id}
+                _id={_id}
+                name={name} roll_no={roll_no}
+                shortName={firstTwoLettersOfName(name)} std={std}
+                join_date={join_date}
+                section={section}
+                feeMonth={feeMonth} phone={phone}
+                setConfirmFeesPaid={setConfirmFeesPaid}
+                setFeeDetails={setFeeDetails}
+                isActive={isActive}
+              />
+            ))}
+          </div>
           {(students.length === 0 && !loading) && (
             <div className="flex justify-center items-center h-[20vh]">
               <div className="flex flex-col items-center gap-5">
@@ -231,9 +241,17 @@ const FeesDetails = () => {
               </div>
             </div>
           )}
+          {(filteredStudents.length === 0 && students.length !== 0) && (
+            <div className="flex justify-center items-center h-[20vh]">
+              <div className="flex flex-col items-center gap-5">
+                <Users className="text-gray-300 size-17" />
+                <span className="text-gray-900">No students found</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      {confirmFeesPaid && <FeePaymentForm 
+      {confirmFeesPaid && <FeePaymentForm
         _id={feeDetails._id}
         name={feeDetails.name}
         std={feeDetails.std}

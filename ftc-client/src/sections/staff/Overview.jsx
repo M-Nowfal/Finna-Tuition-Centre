@@ -1,6 +1,7 @@
 import {
   BookOpen,
   Loader2,
+  StopCircle,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -12,7 +13,7 @@ import axios from "axios";
 
 const Overview = () => {
 
-  const [overviewValues, setOverviewValues] = useState({ total_student: 0, new_this_month: 0 });
+  const [overviewValues, setOverviewValues] = useState({ total_student: 0, new_this_month: 0, disconued: 0 });
 
   const overviews = [
     {
@@ -27,6 +28,12 @@ const Overview = () => {
       num: overviewValues.new_this_month,
       msg: "New enrollments",
     },
+    {
+      title: "Discontinued",
+      icon: <StopCircle className="text-red-500" />,
+      num: overviewValues.disconued,
+      msg: "Disconued Students"
+    }
   ];
 
   const [recentStudents, setRecentStudents] = useState([]);
@@ -36,10 +43,11 @@ const Overview = () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/gettotalstudents`);
       const { students } = res.data || { students: [] };
-      const total_student = students.length;
+      const total_student = (students.filter(student => student.isActive)).length;
+      const disconued = (students.filter(student => !student.isActive)).length;
       const new_this_month = (students.filter(student => student.join_date.split("T")[0].slice(5, 7) == new Date().getMonth() + 1)).length;
       setOverviewValues({
-        total_student, new_this_month
+        total_student, new_this_month, disconued
       });
     } catch (err) {
       const error = err.response?.data?.error || err.message;
@@ -73,7 +81,7 @@ const Overview = () => {
           Welcome back! Here's what's happening at FTC today.
         </p>
       </div>
-      <div className="grid w-full sm:grid-cols-2 gap-2 px-2">
+      <div className="grid w-full sm:grid-cols-2 md:grid-cols-3 gap-2 px-2">
         {overviews.map((overview, index) => (
           <OverviewCard
             key={index}

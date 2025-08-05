@@ -1,7 +1,7 @@
 import { AlertTriangle, Calendar, CheckCircle, Filter, IndianRupee, Loader2, Search, Share, Users } from "lucide-react";
 import OverviewCard from "../../components/cards/OverviewCard";
 import Button from "../../components/ui/Button";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import FeeStatusCard from "../../components/cards/FeeStatusCard";
 import { useEffect } from "react";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
@@ -55,9 +55,9 @@ const FeesDetails = () => {
   });
 
   const getFeeOverviewValues = (students) => {
-    const total_student = students.length;
+    const total_student = (students.filter(student => student.isActive)).length;
     const fee_paid = (students.filter(student => student.feeMonth == currentMonth)).length;
-    const fee_pending = (students.filter(student => student.feeMonth != currentMonth)).length;
+    const fee_pending = (students.filter(student => student.feeMonth != currentMonth && student.isActive)).length;
     const revenue = students.reduce((acc, student) => {
       const total = acc + Number(student.feeRupee);
       return student.feeMonth == currentMonth ? total : acc;
@@ -82,7 +82,6 @@ const FeesDetails = () => {
     }
   };
 
-
   const filterStudents = (e) => {
     const { value } = e.target;
     setSearch(value);
@@ -104,7 +103,7 @@ const FeesDetails = () => {
         break;
       case "FeesPending":
         setFilteredStudents(students.filter(student => (
-          student.feeMonth != currentMonth
+          student.feeMonth != currentMonth && student.isActive
         )));
         break;
       case "DueToday":
@@ -118,7 +117,7 @@ const FeesDetails = () => {
         setFilteredStudents(students.filter(student => {
           const date = student.join_date.split("T")[0].slice(8);
           const today = new Date().getDate().toString().padStart(2, "0");
-          return Number(date) < Number(today);
+          return ((Number(date) < Number(today)) && student.isActive && student.feeMonth != currentMonth);
         }));
         break;
       default:

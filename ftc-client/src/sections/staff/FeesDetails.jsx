@@ -114,6 +114,13 @@ const FeesDetails = () => {
           return date === today;
         }));
         break;
+      case "OverDue":
+        setFilteredStudents(students.filter(student => {
+          const date = student.join_date.split("T")[0].slice(8);
+          const today = new Date().getDate().toString().padStart(2, "0");
+          return Number(date) < Number(today);
+        }));
+        break;
       default:
         setFilteredStudents(students);
     }
@@ -212,6 +219,7 @@ const FeesDetails = () => {
               <option value="FeesPaid">Fees Paid</option>
               <option value="FeesPending">Fees Pending</option>
               <option value="DueToday">Fees Due Today</option>
+              <option value="OverDue">Fees Over Due</option>
             </select>
           </div>
           {loading && <div className="flex justify-center items-center h-[20vh]">

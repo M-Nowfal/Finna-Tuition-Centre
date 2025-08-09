@@ -11,7 +11,7 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
   const lastFeeMonth = feeMonth ? getMonth(feeMonth + 1) : getMonth(join_date.slice(5, 7));
   const [feeRupee, setFeeRupee] = useState(std == 9 ? 900 : 1000);
   const [loading, setLoading] = useState(false);
-  const [feePaidDate, setFeePaidDate] = useState(new Date().toLocaleDateString().replaceAll("/", "-"));
+  const [feePaidDate, setFeePaidDate] = useState(new Date().toLocaleDateString().replaceAll("/", "-").split("-").map(d => d.padStart(2, "0")).join("-"));
 
   const handleProceed = async (e) => {
     try {
@@ -20,7 +20,7 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
       const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee, feePaidDate };
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/payment`, feeDetails);
       setStudents(prev => prev.map(student => (
-        student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth) } : student
+        student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth), feePaidDate } : student
       )));
       setConfirmFeesPaid(false);
       toast.success(res.data.message);

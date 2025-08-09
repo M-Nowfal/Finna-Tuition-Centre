@@ -85,10 +85,17 @@ const FeesDetails = () => {
   const filterStudents = (e) => {
     const { value } = e.target;
     setSearch(value);
-    setFilteredStudents(students.filter(student => (
-      student.name.toLowerCase().includes(value.toLowerCase()) ||
-      student.roll_no.includes(value)
-    )));
+    if (filterByFee !== "AllStudents") {
+      setFilteredStudents(filteredStudents.filter(student => (
+        student.name.toLowerCase().includes(value.toLowerCase()) || student.roll_no?.includes(value)
+      )));
+    } else {
+      setFilteredStudents(students.filter(student => (
+        student.name.toLowerCase().includes(value.toLowerCase()) || student.roll_no?.includes(value)
+      )));
+    }
+    if (!value.trim())
+      filterStudentsByFee(filterByFee);
   };
 
   const filterStudentsByFee = (filter) => {
@@ -99,6 +106,11 @@ const FeesDetails = () => {
       case "FeesPaid":
         setFilteredStudents(students.filter(student => (
           student.feeMonth == currentMonth
+        )));
+        break;
+      case "FeesPaidToday":
+        setFilteredStudents(students.filter(student => (
+          student.feePaidDate?.slice(3, 5) == new Date().getDate()
         )));
         break;
       case "FeesPending":
@@ -132,7 +144,8 @@ const FeesDetails = () => {
 
   useEffect(() => {
     getFeeOverviewValues(students);
-    filterStudentsByFee();
+    filterStudentsByFee(filterByFee);
+    setSearch("");
   }, [students]);
 
   return (
@@ -216,6 +229,7 @@ const FeesDetails = () => {
             >
               <option value="AllStudents">All Students</option>
               <option value="FeesPaid">Fees Paid</option>
+              <option value="FeesPaidToday">Fees Paid Today</option>
               <option value="FeesPending">Fees Pending</option>
               <option value="DueToday">Fees Due Today</option>
               <option value="OverDue">Fees Over Due</option>
@@ -224,7 +238,7 @@ const FeesDetails = () => {
           {loading && <div className="flex justify-center items-center h-[20vh]">
             <Loader2 className="size-10 text-sky-700 animate-spin" />
           </div>}
-          <div className="grid xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+          <div className={`grid ${(students.length === 1 || filteredStudents.length === 1) ? "xl:grid-cols-1" : "xl:grid-cols-2"} gap-3`}>
             {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, phone, join_date, isActive }) => (
               <FeeStatusCard
                 key={_id}

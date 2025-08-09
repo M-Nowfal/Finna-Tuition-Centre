@@ -1,9 +1,10 @@
 import { CircleCheck, CircleX, IndianRupee } from "lucide-react";
 import Button from "../ui/Button";
+import { getMonth } from "../../helpers/dateFormat";
 
-const FeeStatusCard = ({ 
-  _id, name, shortName, roll_no, std, section, feeMonth, 
-  phone, join_date, setConfirmFeesPaid, setFeeDetails, isActive 
+const FeeStatusCard = ({
+  _id, name, shortName, roll_no, std, section, feeMonth,
+  phone, join_date, setConfirmFeesPaid, setFeeDetails, isActive
 }) => {
 
   const paid = (feeMonth == new Date().getMonth() + 1);
@@ -40,17 +41,17 @@ const FeeStatusCard = ({
           </div>
           <div className={`${paid ? "bg-green-400/20 text-emerald-900" : "bg-red-400/20 text-red-800"}  py-1 flex items-center gap-1 rounded-full px-2 text-xs font-semibold`}>
             {paid ? <CircleCheck className="size-3" /> : <CircleX className="size-3" />}
-            {paid ? "Paid" : "Pending"}
+            {paid ? `Paid for ${getMonth(feeMonth)}` : `Pending for ${feeMonth ? getMonth(feeMonth + 1) : getMonth(Number(join_date.split("T")[0].slice(5,7)))}`}
           </div>
-          {!paid ? <Button variant="success" size="sm" 
+          {!paid ? <Button variant="success" size="sm"
             onClick={() => {
               setFeeDetails({
                 _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
               });
               setConfirmFeesPaid(true);
-              }}
+            }}
             disabled={!isActive}
-            >
+          >
             Mark Paid
           </Button> : <Button variant="secondary" size="sm">
             Fees Paid

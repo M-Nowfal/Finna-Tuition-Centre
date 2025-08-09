@@ -145,7 +145,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
         setConfirmFeesPaid={setConfirmFeesPaid}
         setStudents={setStudents}
       />}
-      <div className="mt-5 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
             _id, name, std, section, roll_no, parent, phone, join_date, feeMonth, feeRupee, attendance, isActive

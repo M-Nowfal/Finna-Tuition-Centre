@@ -37,9 +37,9 @@ export const getStudent = async (req, res, next) => {
 export const addStudent = async (req, res, next) => {
   try {
     const studentDetails = req.body;
-    let roll_no = "";
+    let roll_no = null;
     if (studentDetails.feeStatus) {
-      const stud_count = await studentModel.countDocuments({ std: studentDetails.std, roll_no: { $ne: "" } });
+      const stud_count = await studentModel.countDocuments({ std: studentDetails.std, roll_no: { $ne: null } });
       const year = new Date().getFullYear().toString().slice(-2);
       roll_no = year + "FTC" + studentDetails.std + (stud_count + 1).toString().padStart(2, "0");
     }
@@ -94,9 +94,9 @@ export const feesPayment = async (req, res, next) => {
   }
   try {
     const { _id, roll_no, std, lastFeeMonth, feeRupee, feePaidDate } = req.body;
-    let newRollNo = roll_no || "";
+    let newRollNo = roll_no || null;
     if (!roll_no) {
-      const stud_count = await studentModel.countDocuments({ std, roll_no: { $ne: "" } });
+      const stud_count = await studentModel.countDocuments({ std, roll_no: { $ne: null } });
       const year = new Date().getFullYear().toString().slice(-2);
       newRollNo = year + "FTC" + std + (stud_count + 1).toString().padStart(2, "0");
     }

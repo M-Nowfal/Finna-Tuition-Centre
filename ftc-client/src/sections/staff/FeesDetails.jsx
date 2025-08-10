@@ -110,7 +110,7 @@ const FeesDetails = () => {
         break;
       case "FeesPaidToday":
         setFilteredStudents(students.filter(student => (
-          student.feePaidDate?.slice(3, 5) == new Date().getDate()
+          student.feePaidDate?.slice(0, 2) === new Date().getDate().toString().padStart(2, "0")
         )));
         break;
       case "FeesPending":

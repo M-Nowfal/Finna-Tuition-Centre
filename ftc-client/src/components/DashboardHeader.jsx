@@ -61,29 +61,27 @@ const DashboardHeader = ({ role, setShowSideBar }) => {
                   <Edit className="text-gray-500" />
                 </div>}
                 <div className="flex justify-center">
-                  <User className="size-22 bg-gray-300 p-2 text-white rounded-full" />
+                  <User className="size-20 bg-gray-300 p-2 text-white rounded-full" />
                 </div>
                 <div className="flex flex-col gap-2 items-center">
                   <strong className="text-lg">{ftcAuthRole?.name}</strong>
                   <span className="font-semibold">{ftcAuthRole?.staff_id || ftcAuthRole?.roll_no}</span>
                   <p className="text-gray-900">{ftcAuthRole?.phone}</p>
-                  <p className="text-sky-600">{ftcAuthRole?.email}</p>
+                  <p className="text-sky-600 text-sm">{ftcAuthRole?.email}</p>
                 </div>
                 <div className="flex justify-center gap-2">
                   <Button 
                     variant="outlined" 
                     size="sm" 
                     onClick={() => navigate("/")}
-                    className="flex-1"
                   >
                     <Home className="size-4 me-1" />
                     Home
                   </Button>
                   <Button 
-                    variant="danger-outlined" 
+                    variant="danger" 
                     size="sm" 
-                    onClick={() => setShowAlert(true)}
-                    className="flex-1"  
+                    onClick={() => setShowAlert(true)}  
                   >
                     <LogOut className="size-4 me-1" />
                     Log-Out

@@ -239,7 +239,7 @@ const FeesDetails = () => {
             <Loader2 className="size-10 text-sky-700 animate-spin" />
           </div>}
           <div className={`grid ${(students.length === 1 || filteredStudents.length === 1) ? "xl:grid-cols-1" : "xl:grid-cols-2"} gap-3`}>
-            {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, phone, join_date, isActive }) => (
+            {filteredStudents.map(({ _id, name, roll_no, std, section, feeMonth, feePaidDate, join_date, isActive }) => (
               <FeeStatusCard
                 key={_id}
                 _id={_id}
@@ -247,7 +247,7 @@ const FeesDetails = () => {
                 shortName={firstTwoLettersOfName(name)} std={std}
                 join_date={join_date}
                 section={section}
-                feeMonth={feeMonth} phone={phone}
+                feeMonth={feeMonth} feePaidDate={feePaidDate}
                 setConfirmFeesPaid={setConfirmFeesPaid}
                 setFeeDetails={setFeeDetails}
                 isActive={isActive}

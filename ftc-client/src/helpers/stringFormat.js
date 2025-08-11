@@ -4,6 +4,6 @@ export const firstTwoLettersOfName = (name) => {
     if (splittedName.length > 1) return splittedName[0][0].toUpperCase() + splittedName[1][0].toUpperCase();
     return splittedName[0][0].toUpperCase();
   } catch (err) {
-    console.log(err.message);
+    alert("Something went wrong!" + err.message);
   }
 };

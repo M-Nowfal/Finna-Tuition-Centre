@@ -4,7 +4,7 @@ import { getMonth } from "../../helpers/dateFormat";
 
 const FeeStatusCard = ({
   _id, name, shortName, roll_no, std, section, feeMonth,
-  phone, join_date, setConfirmFeesPaid, setFeeDetails, isActive
+  feePaidDate, join_date, setConfirmFeesPaid, setFeeDetails, isActive
 }) => {
 
   const paid = (feeMonth == new Date().getMonth() + 1);
@@ -27,7 +27,7 @@ const FeeStatusCard = ({
                 </span>
                 <span className="font-bold text-gray-950"> {roll_no}</span>
               </div>
-              <span className="text-gray-500">{phone}</span>
+              <span className="text-gray-500">{feePaidDate || "Not Paid"}</span>
             </div>
           </div>
         </div>

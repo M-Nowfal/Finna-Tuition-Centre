@@ -12,7 +12,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
     name: "",
     std,
     section: "A",
-    join_date: "",
+    join_date: new Date().toISOString().split("T")[0],
     parent: "",
     phone: "",
     feeRupee: "",

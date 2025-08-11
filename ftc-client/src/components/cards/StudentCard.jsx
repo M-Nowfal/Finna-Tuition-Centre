@@ -15,7 +15,7 @@ import { getMonth } from "../../helpers/dateFormat";
 const StudentCard = ({
   _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, attendance,
   shortName, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
-  setConfirmFeesPaid, setLastFeeDetails, isActive
+  setConfirmFeesPaid, setLastFeeDetails, isActive, feePaidDate
 }) => {
   const paid = feeMonth;  
   const currentMonth = (feeMonth == new Date().getMonth() + 1);
@@ -65,7 +65,7 @@ const StudentCard = ({
       </div>
       <div className="flex items-center gap-2">
         <IndianRupee className="text-gray-400 size-4" />
-        <p className="text-gray-700 text-sm">{paid ? `Last Fee ₹${feeRupee} paid for ${getMonth(feeMonth)}` : `Pending`}</p>
+        <p className="text-gray-700 text-sm">{paid ? `${feeRupee} paid for ${getMonth(feeMonth)} on ${feePaidDate?? "00-00-0000"}` : `Pending`}</p>
       </div>
       <div className="flex gap-2 my-2">
         <div

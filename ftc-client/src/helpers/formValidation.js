@@ -4,8 +4,8 @@ export const isValidPh = (num) => {
 };
 
 export const isValidName = (name) => {
-  if (/[^a-zA-Z.\s]/.test(name)) 
-    throw new Error("Enter a Valid Name");
+  if (/[^a-zA-Z\s]/.test(name)) 
+    throw new Error("The Name should not contain any numbers, special characters (!, @, $, ., etc...)");
 };
 
 export const isValidRollNo = (roll_no) => {

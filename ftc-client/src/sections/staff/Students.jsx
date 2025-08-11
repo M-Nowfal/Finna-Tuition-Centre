@@ -148,7 +148,8 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
       <div className="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
-            _id, name, std, section, roll_no, parent, phone, join_date, feeMonth, feeRupee, attendance, isActive
+            _id, name, std, section, roll_no, parent, phone, join_date, 
+            feeMonth, feeRupee, attendance, isActive, feePaidDate
           }) => (
             <StudentCard
               key={_id} _id={_id} name={name}
@@ -163,6 +164,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
               setConfirmFeesPaid={setConfirmFeesPaid}
               setLastFeeDetails={setLastFeeDetails}
               isActive={isActive}
+              feePaidDate={feePaidDate}
             />
           ))
         )}

@@ -1,6 +1,7 @@
 const Button = ({
   children,
   onClick,
+  onDoubleClick,
   type = "button",
   variant = "primary",
   size = "md",
@@ -40,6 +41,7 @@ const Button = ({
       type={type}
       className={finalClassName}
       onClick={onClick}
+      onDoubleClick={onDoubleClick}
       disabled={disabled}
       {...rest}
     >

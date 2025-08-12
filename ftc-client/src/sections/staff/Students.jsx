@@ -94,6 +94,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
             key={std}
             variant={selectedStd === std ? "contained" : "secondary"}
             className="flex-1 text-gray-400"
+            // onDoubleClick={}
             onClick={() => setSelectedStd(std)}
           >
             {std}<sup>th</sup>
@@ -149,7 +150,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
             _id, name, std, section, roll_no, parent, phone, join_date, 
-            feeMonth, feeRupee, attendance, isActive, feePaidDate
+            feeMonth, feeRupee, attendance, isActive, feePaidDate, school
           }) => (
             <StudentCard
               key={_id} _id={_id} name={name}
@@ -165,6 +166,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
               setLastFeeDetails={setLastFeeDetails}
               isActive={isActive}
               feePaidDate={feePaidDate}
+              school={school}
             />
           ))
         )}

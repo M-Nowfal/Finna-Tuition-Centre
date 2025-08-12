@@ -6,10 +6,10 @@ import { isValidName, isValidPh, isValidRollNo } from "../../helpers/formValidat
 import Alert from "../../components/ui/Alert";
 
 const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudents }) => {
-  const { _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive } = editingStudentDetails;
+  const { _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive, school } = editingStudentDetails;
   const [studentDetails, setStudentDetails] = useState({
     _id, name, roll_no, std, section, join_date,
-    parent, phone, feeRupee, feeMonth, isActive
+    parent, phone, feeRupee, feeMonth, isActive, school
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -76,7 +76,7 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="w-full max-w-2xl overflow-y-auto max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
+      <div className="w-full max-w-2xl overflow-y-auto scrollbar-hide max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
@@ -129,6 +129,21 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
                 className={`rounded-lg outline-1 p-2 ${!feeMonth ? "opacity-30" : "opacity-100"} outline-gray-200`}
                 placeholder="Enter Student's Roll:No"
                 disabled={!studentDetails.feeMonth}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <label htmlFor="roll_no" className={`font-semibold text-sm ms-2`}>
+                School *
+              </label>
+              <input
+                type="text"
+                name="school"
+                id="school"
+                value={studentDetails.school}
+                onChange={handleInputChange}
+                className={`rounded-lg outline-1 p-2 outline-gray-200`}
+                placeholder="Enter Student's school name"
                 required
               />
             </div>
@@ -213,7 +228,7 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
                 value={studentDetails.parent}
                 onChange={handleInputChange}
                 className="rounded-lg outline-1 p-2 outline-gray-200"
-                placeholder="Enter Student's full name"
+                placeholder="Enter Student Father's name"
                 required
               />
             </div>

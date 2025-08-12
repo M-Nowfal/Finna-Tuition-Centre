@@ -3,8 +3,8 @@ import Button from "../ui/Button";
 import { getMonth } from "../../helpers/dateFormat";
 
 const FeeStatusCard = ({
-  _id, name, shortName, roll_no, std, section, feeMonth,
-  feePaidDate, join_date, setConfirmFeesPaid, setFeeDetails, isActive
+  _id, name, shortName, roll_no, std, section, feeMonth, feePaidDate,
+  join_date, setConfirmFeesPaid, setFeeDetails, isActive, paymentMethod
 }) => {
 
   const paid = (feeMonth == new Date().getMonth() + 1);
@@ -33,15 +33,18 @@ const FeeStatusCard = ({
         </div>
         <div className="flex flex-col sm:flex-row gap-3 md:gap-5 items-center">
           <div className="flex flex-col">
-            <div className="flex items-center">
-              <IndianRupee className="size-3" />
-              <span className="text-xl font-semibold">{feeRupee}</span>
+            <div className="flex gap-2">
+              <div className="flex items-center">
+                <IndianRupee className="size-3" />
+                <span className="text-xl font-semibold">{feeRupee}</span>
+              </div>
+              {paymentMethod && <img src={paymentMethod === "cash" ? "/money.png" : "/google-pay.png"} alt={paymentMethod} width={40} height={40} />}
             </div>
             <span className="hidden sm:block text-xs text-gray-500">Monthly Fee</span>
           </div>
           <div className={`${paid ? "bg-green-400/20 text-emerald-900" : "bg-red-400/20 text-red-800"}  py-1 flex items-center gap-1 rounded-full px-2 text-xs font-semibold`}>
             {paid ? <CircleCheck className="size-3" /> : <CircleX className="size-3" />}
-            {paid ? `Paid for ${getMonth(feeMonth)}` : `Pending for ${feeMonth ? getMonth(feeMonth + 1) : getMonth(Number(join_date.split("T")[0].slice(5,7)))}`}
+            {paid ? `Paid for ${getMonth(feeMonth)}` : `Pending for ${feeMonth ? getMonth(feeMonth + 1) : getMonth(Number(join_date.split("T")[0].slice(5, 7)))}`}
           </div>
           {!paid ? <Button variant="success" size="sm"
             onClick={() => {

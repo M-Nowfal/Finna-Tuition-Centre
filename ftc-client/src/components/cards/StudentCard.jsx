@@ -6,6 +6,7 @@ import {
   GraduationCap,
   IndianRupee,
   Phone,
+  School,
   User,
 } from "lucide-react";
 import Button from "../ui/Button";
@@ -15,7 +16,7 @@ import { getMonth } from "../../helpers/dateFormat";
 const StudentCard = ({
   _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, attendance,
   shortName, markAttendance, setShowEditStudentForm, setEditingStudentDetails, 
-  setConfirmFeesPaid, setLastFeeDetails, isActive, feePaidDate
+  setConfirmFeesPaid, setLastFeeDetails, isActive, feePaidDate, school
 }) => {
   const paid = feeMonth;  
   const currentMonth = (feeMonth == new Date().getMonth() + 1);
@@ -46,10 +47,14 @@ const StudentCard = ({
         </div>
         <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
           <Edit className="text-gray-400 size-4" onClick={() => {
-            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive });
+            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive, school });
             setShowEditStudentForm(prev => !prev);
           }} />
         </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <School className="text-gray-400 size-4" />
+        <p className="text-gray-700 text-sm">{school || "Not Updated"}</p>
       </div>
       <div className="flex items-center gap-2">
         <User className="text-gray-400 size-4" />

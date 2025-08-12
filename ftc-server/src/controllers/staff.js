@@ -93,7 +93,7 @@ export const feesPayment = async (req, res, next) => {
     "July": 7, "August": 8, "September": 9, "October": 10, "November": 11, "December": 12
   }
   try {
-    const { _id, roll_no, std, lastFeeMonth, feeRupee, feePaidDate } = req.body;
+    const { _id, roll_no, std, lastFeeMonth, feeRupee, feePaidDate, paymentMethod } = req.body;
     let newRollNo = roll_no || null;
     if (!roll_no) {
       const stud_count = await studentModel.countDocuments({ std, roll_no: { $ne: null } });
@@ -104,7 +104,8 @@ export const feesPayment = async (req, res, next) => {
       feeMonth: months[lastFeeMonth],
       feeRupee,
       roll_no: newRollNo,
-      feePaidDate
+      feePaidDate,
+      paymentMethod
     });
     res.status(200).json({ message: `Fees Paid Successfully for the month ${lastFeeMonth}`, roll_no: newRollNo });
   } catch (err) {

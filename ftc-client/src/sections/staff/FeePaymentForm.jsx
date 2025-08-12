@@ -3,7 +3,7 @@ import { getMonth, getMonthNumber } from "../../helpers/dateFormat";
 import Button from "../../components/ui/Button";
 import { toast } from "sonner";
 import axios from "axios";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { BouncingDots } from "../../components/ui/Loader";
 
 const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date, setConfirmFeesPaid, setStudents }) => {
@@ -11,13 +11,16 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
   const lastFeeMonth = feeMonth ? getMonth(feeMonth + 1) : getMonth(join_date.slice(5, 7));
   const [feeRupee, setFeeRupee] = useState(std == 9 ? 900 : 1000);
   const [loading, setLoading] = useState(false);
-  const [feePaidDate, setFeePaidDate] = useState(new Date().toLocaleDateString().replaceAll("/", "-").split("-").map(d => d.padStart(2, "0")).join("-"));
+  const date = new Date();
+  const currentDate = date.getDate().toString().padStart(2, "0") + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getFullYear();
+  const [feePaidDate, setFeePaidDate] = useState(currentDate);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const handleProceed = async (e) => {
     try {
       e.preventDefault();
       setLoading(true);
-      const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee, feePaidDate };
+      const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee, feePaidDate, paymentMethod };
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/payment`, feeDetails);
       setStudents(prev => prev.map(student => (
         student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth), feePaidDate } : student
@@ -32,9 +35,14 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
     }
   };
 
+  const handlePaymentMethod = (e) => {
+    const { name } = e.target;
+    setPaymentMethod(name);
+  };
+
   return (
-    <div className="flex fixed z-10 inset-0 bg-black/30 justify-center items-center">
-      <form onSubmit={handleProceed} className="bg-white border sm:min-w-xl lg:min-w-2xl mx-2 border-gray-400 rounded-xl p-5 ">
+    <div className="flex fixed z-10 inset-0 bg-black/30 justify-center items-center p-4">
+      <form onSubmit={handleProceed} className="bg-white border overflow-y-auto scrollbar-hide max-h-[90vh] w-full max-w-2xl border-gray-400 rounded-xl p-5 ">
         <div
           className="w-fit ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200 mb-2"
           role="button"
@@ -130,6 +138,33 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
             onChange={(e) => setFeePaidDate(e.target.value)}
             required
           />
+        </div>
+        <div className="flex flex-col gap-2 mt-5">
+          <span className="font-semibold text-sm ms-2">Payment Method *</span>
+          <div className="flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              name="cash" id="cash" 
+              className="size-4  cursor-pointer" 
+              checked={paymentMethod === "cash"} 
+              onClick={handlePaymentMethod} 
+            />
+            <label htmlFor="cash" className="font-semibold  cursor-pointer">
+              <img src="/money.png" alt="Cash" width={40} height={40} />
+            </label>
+          </div>
+          <div className="flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              name="gPay" id="gPay" 
+              className="size-4  cursor-pointer" 
+              checked={paymentMethod === "gPay"} 
+              onClick={handlePaymentMethod} 
+            />
+            <label htmlFor="gPay" className="font-semibold  cursor-pointer">
+              <img src="/google-pay.png" alt="G-Py" width={50} height={50} />
+            </label>
+          </div>
         </div>
 
         <div className="flex flex-col mt-5 gap-2">

@@ -6,6 +6,7 @@ const Student = () => {
   const { student } = useLocation().state || { student: {} };
 
   const student_details = [
+    { label: "School", value: student?.school },
     { label: "Join Date", value: student?.join_date.split("T")[0] },
     { label: "Class", value: student?.std },
     { label: "Section", value: student?.section },

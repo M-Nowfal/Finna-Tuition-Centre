@@ -8,8 +8,11 @@ import { toast } from "sonner";
 import { getMonth } from "../../helpers/dateFormat";
 
 const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
+  const date = new Date();
+  const currentDate = date.getDate().toString().padStart(2, "0") + "-" + (date.getMonth() + 1).toString().padStart(2, "0") + "-" + date.getFullYear();
   const [studentDetails, setStudentDetails] = useState({
     name: "",
+    school: "",
     std,
     section: "A",
     join_date: new Date().toISOString().split("T")[0],
@@ -18,6 +21,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
     feeRupee: "",
     feeMonth: "",
     feeStatus: false,
+    feePaidDate: currentDate,
     isActive: true
   });
   const [loading, setLoading] = useState(false);
@@ -69,7 +73,7 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="w-full max-w-2xl overflow-y-auto max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
+      <div className="w-full max-w-2xl overflow-y-auto scrollbar-hide max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
@@ -103,6 +107,22 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
                 onChange={handleInputChange}
                 className="rounded-lg outline-1 p-2 outline-gray-200"
                 placeholder="Enter Student's full name"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <label htmlFor="school" className="font-semibold text-sm ms-2">
+                School Name *
+              </label>
+              <input
+                autoFocus
+                type="text"
+                name="school"
+                id="school"
+                value={studentDetails.school}
+                onChange={handleInputChange}
+                className="rounded-lg outline-1 p-2 outline-gray-200"
+                placeholder="Enter Student's school name"
                 required
               />
             </div>
@@ -247,6 +267,20 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
               Fees paid for current month {getMonth(new Date().getMonth() + 1)}
             </label>
           </div>
+          {studentDetails.feeStatus && <div className="flex flex-col gap-3 mt-5">
+            <label htmlFor="feePaidDate" className="font-semibold">
+              Fee Date
+            </label>
+            <input
+              type="text"
+              name="feePaidDate"
+              id="feePaidDate"
+              value={studentDetails.feePaidDate}
+              onChange={handleInputChange}
+              className="rounded-lg outline-1 p-2 outline-gray-200"
+              placeholder="Enter Paying date"
+            />
+          </div>}
           {error && (
             <div className="border border-red-400 p-4 rounded-xl flex gap-3 my-5">
               <AlertCircle className="size-4 text-red-500 mt-0.5" />
@@ -255,11 +289,11 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
           )}
           <hr className="mb-5 mt-4 text-gray-300" />
           <div className="flex flex-col sm:flex-row-reverse justify-end gap-3">
-            <Button 
-              variant="contained" 
-              type="submit" 
-              size="sm" 
-              className="flex-1" 
+            <Button
+              variant="contained"
+              type="submit"
+              size="sm"
+              className="flex-1"
               disabled={loading}
             >
               {loading ? "Submitting" : "Submit"}&nbsp;&nbsp;

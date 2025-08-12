@@ -3,6 +3,7 @@ import mongoose, { model, Schema } from "mongoose";
 // student schema creation
 const studentSchema = new Schema({
   name: { type: String, required: true },
+  school: { type: String },
   roll_no: { type: String },
   std: { type: String, enum: ["9", "10", "11", "12"] },
   section: { type: String, enum: ["A", "B", "C", "D"]},
@@ -12,6 +13,7 @@ const studentSchema = new Schema({
   feeRupee: { type: String },
   feeMonth: { type: Number, enum: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
   feePaidDate: { type: String },
+  paymentMethod: { type: String, enum: ["cash", "gPay"] },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
 

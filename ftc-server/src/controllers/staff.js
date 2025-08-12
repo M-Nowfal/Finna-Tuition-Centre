@@ -15,7 +15,10 @@ export const getTotalStudents = async (_req, res, next) => {
 export const getAllStudents = async (req, res, next) => {
   try {
     const { std } = req.params;
-    const students = await studentModel.find({ std });
+    const { section } = req.query;
+    const query = { std };
+    if (section !== "All") query.section = section;
+    const students = await studentModel.find(query);
     res.status(200).json({ message: "Students fetched successfully", students });
   } catch (err) {
     next(err);

@@ -41,15 +41,17 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
   };
 
   return (
-    <div className="flex fixed z-10 inset-0 bg-black/30 justify-center items-center p-4">
-      <form onSubmit={handleProceed} className="bg-white border overflow-y-auto scrollbar-hide max-h-[90vh] w-full max-w-2xl border-gray-400 rounded-xl p-5 ">
+    <div className="flex flex-col fixed z-10 inset-0 bg-black/30 justify-center items-center p-4">
+      <div className="w-full max-w-2xl">
         <div
-          className="w-fit ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200 mb-2"
+          className="w-fit ms-auto cursor-pointer bg-sky-50 hover:bg-red-300 p-1 rounded-lg transition-all duration-200 mb-2"
           role="button"
           onClick={() => setConfirmFeesPaid(false)}
         >
-          <X className="text-gray-500 size-5" />
+          <X className="text-black size-5" />
         </div>
+      </div>
+      <form onSubmit={handleProceed} className="bg-white border overflow-y-auto scrollbar-hide max-h-[90vh] w-full max-w-2xl border-gray-400 rounded-xl p-5 ">
         <div className="flex gap-1 items-center mb-2">
           <IndianRupee className="text-sky-700 mt-1 size-5" />
           <span className="text-2xl font-semibold">Fees Payment for the month {lastFeeMonth}</span>
@@ -141,29 +143,31 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
         </div>
         <div className="flex flex-col gap-2 mt-5">
           <span className="font-semibold text-sm ms-2">Payment Method *</span>
-          <div className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
-              name="cash" id="cash" 
-              className="size-4  cursor-pointer" 
-              checked={paymentMethod === "cash"} 
-              onClick={handlePaymentMethod} 
-            />
-            <label htmlFor="cash" className="font-semibold  cursor-pointer">
-              <img src="/money.png" alt="Cash" width={40} height={40} />
-            </label>
-          </div>
-          <div className="flex items-center gap-2">
-            <input 
-              type="checkbox" 
-              name="gPay" id="gPay" 
-              className="size-4  cursor-pointer" 
-              checked={paymentMethod === "gPay"} 
-              onClick={handlePaymentMethod} 
-            />
-            <label htmlFor="gPay" className="font-semibold  cursor-pointer">
-              <img src="/google-pay.png" alt="G-Py" width={50} height={50} />
-            </label>
+          <div className="flex gap-5 items-center ms-1">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="cash" id="cash"
+                className="size-4  cursor-pointer"
+                checked={paymentMethod === "cash"}
+                onClick={handlePaymentMethod}
+              />
+              <label htmlFor="cash" className="font-semibold  cursor-pointer">
+                <img src="/money.png" alt="Cash" width={40} height={40} />
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="gPay" id="gPay"
+                className="size-4  cursor-pointer"
+                checked={paymentMethod === "gPay"}
+                onClick={handlePaymentMethod}
+              />
+              <label htmlFor="gPay" className="font-semibold  cursor-pointer">
+                <img src="/google-pay.png" alt="G-Py" width={50} height={50} />
+              </label>
+            </div>
           </div>
         </div>
 

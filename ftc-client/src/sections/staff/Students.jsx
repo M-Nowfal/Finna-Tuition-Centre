@@ -1,4 +1,4 @@
-import { Loader2, Plus, Search, Users } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Plus, Search, Users } from "lucide-react";
 import StudentCard from "../../components/cards/StudentCard";
 import Button from "../../components/ui/Button";
 import { useEffect, useState } from "react";
@@ -20,14 +20,16 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
   });
   const [confirmFeesPaid, setConfirmFeesPaid] = useState(false);
   const [lastFeeDetails, setLastFeeDetails] = useState({
-    name: "", std: "", section: "", roll_no: "",feeMonth: "", join_date: ""
+    name: "", std: "", section: "", roll_no: "", feeMonth: "", join_date: ""
   });
   const [selectedStd, setSelectedStd] = useState(9);
+  const [selectedSection, setSelectedSection] = useState("All");
+  const [showSections, setShowSections] = useState(false);
 
   const getStudents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}?section=${selectedSection}`);
       setStudents(res.data.students || []);
     } catch (err) {
       const error = err.response?.data?.error || err.message;
@@ -39,6 +41,10 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
 
   useEffect(() => {
     getStudents();
+  }, [selectedStd, selectedSection]);
+
+  useEffect(() => {
+    setSelectedSection("All");
   }, [selectedStd]);
 
   useEffect(() => {
@@ -88,19 +94,45 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
           setStudents={setStudents}
         />
       )}
-      <div className="flex max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
+      <div className="flex relative z-10 max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
         {[9, 10, 11, 12].map(std => (
           <Button
             key={std}
             variant={selectedStd === std ? "contained" : "secondary"}
             className="flex-1 text-gray-400"
-            // onDoubleClick={}
             onClick={() => setSelectedStd(std)}
           >
-            {std}<sup>th</sup>
+            {std}<sup>th</sup>{(selectedStd === std && selectedSection !== "All") && <span>&nbsp; {selectedSection}</span>}
+            {(selectedStd === std && showSections) ? (
+              <ChevronUp 
+                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                onClick={() => setShowSections(false)}
+              />
+            ) : (
+              selectedStd === std && <ChevronDown
+                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                onClick={() => setShowSections(true)}
+              />
+            )}
           </Button>
         ))}
       </div>
+      {showSections && <div className="absolute inset-0" role="button" onClick={() => setShowSections(false)}></div>}
+      {showSections && <div className="relative w-80 z-10 flex m-auto mb-3 gap-1 bg-gray-100 text-white p-1 rounded-md shadow-lg">
+        {["All", "A", "B", "C"].map(section => (
+          <Button
+            key={section}
+            variant={selectedSection === section ? "contained" : "secondary"}
+            className="flex-1"
+            onClick={() => {
+              setSelectedSection(section);
+              setShowSections(false);
+            }}
+          >
+            {section}
+          </Button>
+        ))}
+      </div>}
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-2">
           <span className="font-bold text-2xl md:text-3xl">
@@ -109,7 +141,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
           <p className="text-gray-500">
             Manage student profiles and information
           </p>
-          <div className="sm:w-90 lg:w-125 mt-4 mb-2">
+          <div className="sm:w-90 lg:w-125 mt-4 mb-2 flex">
             <div className="relative">
               <Search className="absolute top-3.5 left-2 size-4 text-gray-500" />
             </div>
@@ -135,7 +167,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
         </Button>
       </div>
       {/* Confirm Fee */}
-      {confirmFeesPaid && <FeePaymentForm 
+      {confirmFeesPaid && <FeePaymentForm
         _id={lastFeeDetails._id}
         name={lastFeeDetails.name}
         std={lastFeeDetails.std}
@@ -149,7 +181,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
       <div className="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
-            _id, name, std, section, roll_no, parent, phone, join_date, 
+            _id, name, std, section, roll_no, parent, phone, join_date,
             feeMonth, feeRupee, attendance, isActive, feePaidDate, school
           }) => (
             <StudentCard

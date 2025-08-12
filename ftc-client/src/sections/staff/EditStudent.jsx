@@ -6,9 +6,9 @@ import { isValidName, isValidPh, isValidRollNo } from "../../helpers/formValidat
 import Alert from "../../components/ui/Alert";
 
 const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudents }) => {
-  const { _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive, school } = editingStudentDetails;
+  const { _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, feePaidDate, isActive, school } = editingStudentDetails;
   const [studentDetails, setStudentDetails] = useState({
-    _id, name, roll_no, std, section, join_date,
+    _id, name, roll_no, std, section, join_date, feePaidDate,
     parent, phone, feeRupee, feeMonth, isActive, school
   });
   const [loading, setLoading] = useState(false);
@@ -75,7 +75,16 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center p-4 z-50">
+      <div className="w-full max-w-2xl">
+        <div
+          className="w-fit ms-auto cursor-pointer bg-sky-50 hover:bg-red-300 p-1 rounded-lg transition-all duration-200 mb-2"
+          role="button"
+          onClick={() => setShowEditStudentForm(false)}
+        >
+          <X className="text-black size-5" />
+        </div>
+      </div>
       <div className="w-full max-w-2xl overflow-y-auto scrollbar-hide max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -83,12 +92,6 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
               <UserPlus className="text-sky-600 size-6" />
               <span className="text-xl font-bold">Edit Student</span>
             </div>
-          </div>
-          <div className="hover:bg-sky-100 cursor-pointer p-1 rounded-md">
-            <X
-              className="text-gray-600 size-5"
-              onClick={() => setShowEditStudentForm(false)}
-            />
           </div>
         </div>
         <form className="mt-5" onSubmit={handleSubmit}>

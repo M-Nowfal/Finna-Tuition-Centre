@@ -5,8 +5,8 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
   const sideBarOptions = [
     { icon: <Home className="size-4" />, title: "Overview" },
     { icon: <Users className="size-4" />, title: "Students" },
-    { icon: <Calendar className="size-4" />, title: "Attendance" },
     { icon: <IndianRupee className="size-4" />, title: "Fees" },
+    { icon: <Calendar className="size-4" />, title: "Attendance" },
     { icon: <Settings className="size-4" />, title: "Settings" },
   ];
 
@@ -33,6 +33,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
               key={index}
               variant={option.title === activeTab ? "contained" : "transparent"}
               className="flex gap-4 justify-start items-center hover:bg-sky-100"
+              disabled={index === 3 || index === 4}
               onClick={() => setActiveTab(option.title)}
             >
               {option.icon}

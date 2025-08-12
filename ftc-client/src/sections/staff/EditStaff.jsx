@@ -42,15 +42,17 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
   };
 
   return (
-    <div className="fixed flex z-10 justify-center items-center inset-0 bg-black/30">
-      <form onSubmit={handleSubmit} className="flex flex-col bg-white p-5 border border-gray-400 shadow rounded-2xl gap-3 w-[95%] md:w-2xl">
+    <div className="fixed flex flex-col z-10 p-4 justify-center items-center inset-0 bg-black/30">
+      <div className="w-full max-w-2xl">
         <div
-          className="ms-auto cursor-pointer hover:bg-sky-100 p-1 rounded-lg transition-all duration-200"
+          className="w-fit ms-auto cursor-pointer bg-sky-50 p-1 rounded-lg transition-all duration-200 mb-2"
           role="button"
           onClick={() => setShowEditStaffForm(false)}
         >
-          <X className="text-gray-400" />
+          <X className="text-black size-5" />
         </div>
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col bg-white p-5 border border-gray-400 shadow rounded-2xl gap-3 w-full md:w-2xl">
         <div className="flex gap-2 items-center">
           <Edit className="text-sky-600" />
           <span className="text-xl font-semibold">Edit Staff Details of '{old_details.staff_id}'</span>

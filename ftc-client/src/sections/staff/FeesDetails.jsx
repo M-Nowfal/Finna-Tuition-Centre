@@ -1,4 +1,4 @@
-import { AlertTriangle, Calendar, CheckCircle, Filter, IndianRupee, Loader2, Search, Share, Users } from "lucide-react";
+import { AlertTriangle, Calendar, CheckCircle, ChevronDown, ChevronUp, Filter, IndianRupee, Loader2, Search, Share, Users } from "lucide-react";
 import OverviewCard from "../../components/cards/OverviewCard";
 import Button from "../../components/ui/Button";
 import { useState } from "react";
@@ -53,6 +53,8 @@ const FeesDetails = () => {
     _id: "", name: "", std: "", section: "", roll_no: "",
     feeMonth: "", join_date: ""
   });
+  const [selectedSection, setSelectedSection] = useState("All");
+  const [showSections, setShowSections] = useState(false);
 
   const getFeeOverviewValues = (students) => {
     const total_student = (students.filter(student => student.isActive)).length;
@@ -70,7 +72,7 @@ const FeesDetails = () => {
   const getStudents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}?section=${selectedSection}`);
       setStudents(res.data.students || []);
       getFeeOverviewValues(res.data.students || []);
       setFilteredStudents(res.data.students || []);
@@ -139,8 +141,13 @@ const FeesDetails = () => {
 
   useEffect(() => {
     getStudents();
+    setSelectedSection("All");
     setFilterByFee("AllStudents");
   }, [selectedStd]);
+
+  useEffect(() => {
+    getStudents();
+  }, [selectedStd, selectedSection]);
 
   useEffect(() => {
     getFeeOverviewValues(students);
@@ -150,7 +157,7 @@ const FeesDetails = () => {
 
   return (
     <div className="p-3">
-      <div className="flex max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
+      <div className="flex relative z-10 max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
         {[9, 10, 11, 12].map(std => (
           <Button
             key={std}
@@ -158,10 +165,37 @@ const FeesDetails = () => {
             className="flex-1 text-gray-400"
             onClick={() => setSelectedStd(std)}
           >
-            {std}<sup>th</sup>
+            {std}<sup>th</sup>{(selectedStd === std && selectedSection !== "All") && <span>&nbsp; {selectedSection}</span>}
+            {(selectedStd === std && showSections) ? (
+              <ChevronUp
+                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                onClick={() => setShowSections(false)}
+              />
+            ) : (
+              selectedStd === std && <ChevronDown
+                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                onClick={() => setShowSections(true)}
+              />
+            )}
           </Button>
         ))}
       </div>
+      {showSections && <div className="absolute inset-0" role="button" onClick={() => setShowSections(false)}></div>}
+      {showSections && <div className="relative w-80 z-10 flex m-auto mb-3 gap-1 bg-gray-100 text-white p-1 rounded-md shadow-lg">
+        {["All", "A", "B", "C"].map(section => (
+          <Button
+            key={section}
+            variant={selectedSection === section ? "contained" : "secondary"}
+            className="flex-1"
+            onClick={() => {
+              setSelectedSection(section);
+              setShowSections(false);
+            }}
+          >
+            {section}
+          </Button>
+        ))}
+      </div>}
       <div className="bg-gray-50 flex flex-col gap-3">
         <div className="flex flex-col gap-2 ps-2">
           <span className="text-3xl font-bold">Fees Management</span>

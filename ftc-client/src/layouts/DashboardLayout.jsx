@@ -7,7 +7,7 @@ import NavigateUp from "../components/ui/NavigateUp";
 const DashboardLayout = () => {
   const { role } = useLocation().state || { role: "" };
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Overview");
+  const [activeTab, setActiveTab] = useState("Students");
   const [showSideBar, setShowSideBar] = useState(false);
   const [showStudentAddForm, setShowStudentAddForm] = useState(false);
   const [showScrollUpBtn, setShowScrollUpBtn] = useState(false);

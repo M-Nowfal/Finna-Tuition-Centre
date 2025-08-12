@@ -25,7 +25,7 @@ const StudentCard = ({
 
   return (
     <div
-      className={`flex gap-2 py-5 px-5 flex-col border-l-4 border-l-sky-500 border 
+      className={`flex gap-2 py-5 px-5 flex-col border-l-4 border ${isActive ? "border-l-sky-500" : "border-l-red-500"} 
       border-gray-300 rounded-xl bg-white shadow hover:shadow-xl transition-all duration-200 ${!isActive && "opacity-50"}`}
     >
       <div className="flex items-center justify-between">
@@ -47,7 +47,7 @@ const StudentCard = ({
         </div>
         <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
           <Edit className="text-gray-400 size-4" onClick={() => {
-            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, isActive, school });
+            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, feePaidDate, isActive, school });
             setShowEditStudentForm(prev => !prev);
           }} />
         </div>

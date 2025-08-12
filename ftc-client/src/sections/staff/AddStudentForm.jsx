@@ -72,7 +72,16 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/50 flex flex-col items-center justify-center p-4 z-50">
+      <div className="w-full max-w-2xl">
+        <div
+          className="w-fit ms-auto cursor-pointer bg-sky-50 hover:bg-red-300 p-1 rounded-lg transition-all duration-200 mb-2"
+          role="button"
+          onClick={() => !loading && setShowStudentAddForm(false)}
+        >
+          <X className="text-black size-5" />
+        </div>
+      </div>
       <div className="w-full max-w-2xl overflow-y-auto scrollbar-hide max-h-[90vh] bg-white p-5 rounded-xl border border-gray-200">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-1">
@@ -83,12 +92,6 @@ const AddStudentForm = ({ setShowStudentAddForm, setStudents, std }) => {
             <p className="text-gray-500">
               Enter the student's information to create a new profile
             </p>
-          </div>
-          <div className="hover:bg-sky-100 cursor-pointer p-1 rounded-md">
-            <X
-              className="text-gray-600 size-5"
-              onClick={() => !loading && setShowStudentAddForm(false)}
-            />
           </div>
         </div>
         <form className="mt-5" onSubmit={handleSubmit}>

@@ -105,12 +105,12 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
             {std}<sup>th</sup>{(selectedStd === std && selectedSection !== "All") && <span>&nbsp; {selectedSection}</span>}
             {(selectedStd === std && showSections) ? (
               <ChevronUp 
-                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
                 onClick={() => setShowSections(false)}
               />
             ) : (
               selectedStd === std && <ChevronDown
-                className="size-5 relative -right-5 hover:bg-sky-500 h-full rounded"
+                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
                 onClick={() => setShowSections(true)}
               />
             )}

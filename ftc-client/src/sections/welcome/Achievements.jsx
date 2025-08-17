@@ -10,7 +10,7 @@ const Achievements = () => {
     },
     {
       icon: <Award className="text-black size-15" />,
-      title: "595% Success Rate",
+      title: "95% Success Rate",
       description: "Students achieving their target grades",
     },
     {

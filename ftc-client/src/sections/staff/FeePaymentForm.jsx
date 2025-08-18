@@ -3,7 +3,7 @@ import { getMonth, getMonthNumber } from "../../helpers/dateFormat";
 import Button from "../../components/ui/Button";
 import { toast } from "sonner";
 import axios from "axios";
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { BouncingDots } from "../../components/ui/Loader";
 
 const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date, setConfirmFeesPaid, setStudents }) => {
@@ -23,7 +23,7 @@ const FeePaymentForm = ({ _id, name, roll_no, std, section, feeMonth, join_date,
       const feeDetails = { _id, name, roll_no, std, section, lastFeeMonth, feeRupee, feePaidDate, paymentMethod };
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/staff/payment`, feeDetails);
       setStudents(prev => prev.map(student => (
-        student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth), feePaidDate } : student
+        student._id === _id ? { ...student, roll_no: res.data.roll_no, feeRupee, feeMonth: getMonthNumber(lastFeeMonth), feePaidDate, paymentMethod } : student
       )));
       setConfirmFeesPaid(false);
       toast.success(res.data.message);

@@ -8,7 +8,7 @@ import axios from "axios";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
 import FeePaymentForm from "./FeePaymentForm";
 
-const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
+const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }) => {
 
   const [loading, setLoading] = useState(false);
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
@@ -71,7 +71,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
       students.filter(
         (student) =>
           student.name.toLowerCase().includes(value.toLowerCase()) ||
-          student.roll_no.includes(value)
+          student.roll_no?.includes(value)
       )
     );
   };
@@ -178,7 +178,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm }) => {
         setConfirmFeesPaid={setConfirmFeesPaid}
         setStudents={setStudents}
       />}
-      <div className="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className={`mt-5 grid md:grid-cols-2 xl:grid-cols-3 ${!showScrollUpBtn ? "" : "2xl:grid-cols-4"} gap-5`}>
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
             _id, name, std, section, roll_no, parent, phone, join_date,

@@ -6,7 +6,7 @@ import FeesDetails from "../sections/staff/FeesDetails";
 import StaffSettings from "../sections/staff/StaffSettings";
 
 const Staff = () => {
-  const { activeTab, showStudentAddForm, setShowStudentAddForm } = useOutletContext();
+  const { activeTab, showStudentAddForm, setShowStudentAddForm, showScrollUpBtn } = useOutletContext();
 
   switch (activeTab) {
     case "Overview":
@@ -16,6 +16,7 @@ const Staff = () => {
         <Students
           showStudentAddForm={showStudentAddForm}
           setShowStudentAddForm={setShowStudentAddForm}
+          showScrollUpBtn={showScrollUpBtn}
         />
       );
     case "Attendance":

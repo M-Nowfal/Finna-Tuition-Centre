@@ -7,7 +7,7 @@ import NavigateUp from "../components/ui/NavigateUp";
 const DashboardLayout = () => {
   const { role } = useLocation().state || { role: "" };
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Students");
+  const [activeTab, setActiveTab] = useState("Overview");
   const [showSideBar, setShowSideBar] = useState(false);
   const [showStudentAddForm, setShowStudentAddForm] = useState(false);
   const [showScrollUpBtn, setShowScrollUpBtn] = useState(false);
@@ -38,11 +38,12 @@ const DashboardLayout = () => {
             setActiveTab={setActiveTab}
             showSideBar={showSideBar}
             setShowSideBar={setShowSideBar}
+            showScrollUpBtn={showScrollUpBtn}
           />
         )}
         {(activeTab !== "Settings" && activeTab !== "Attendance" && showScrollUpBtn) && <NavigateUp />}
         <section className="w-full">
-          <Outlet context={{ activeTab, showStudentAddForm, setShowStudentAddForm }} />
+          <Outlet context={{ activeTab, showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }} />
         </section>
       </div>
     </div>

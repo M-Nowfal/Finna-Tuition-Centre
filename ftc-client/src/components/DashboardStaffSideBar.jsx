@@ -1,7 +1,7 @@
 import { Calendar, Home, IndianRupee, Settings, Users } from "lucide-react";
 import Button from "../components/ui/Button";
 
-const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSideBar }) => {
+const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSideBar, showScrollUpBtn }) => {
   const sideBarOptions = [
     { icon: <Home className="size-4" />, title: "Overview" },
     { icon: <Users className="size-4" />, title: "Students" },
@@ -12,7 +12,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
 
   return (
     <>
-      <div className={`${showSideBar ? "hidden md:flex" : "hidden"} w-75 min-h-screen flex-col bg-white gap-4 shadow border-r border-gray-200 pt-5`}>
+      <div className={`${(showSideBar && !showScrollUpBtn) ? "hidden md:flex" : "hidden"} w-75 min-h-screen flex-col bg-white gap-4 shadow border-r border-gray-200 pt-5`}>
         {sideBarOptions.map((option, index) => (
           <Button
             key={index}

@@ -33,7 +33,7 @@ const DashboardStaffSideBar = ({ activeTab, setActiveTab, showSideBar, setShowSi
               key={index}
               variant={option.title === activeTab ? "contained" : "transparent"}
               className="flex gap-4 justify-start items-center hover:bg-sky-100"
-              disabled={index === 3 || index === 4}
+              disabled={index === 4}
               onClick={() => setActiveTab(option.title)}
             >
               {option.icon}

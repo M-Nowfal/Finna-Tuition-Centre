@@ -20,7 +20,7 @@ const Button = ({
     outlined: "border border-sky-600 text-sky-600 hover:bg-sky-100",
     transparent: "bg-transparent",
     danger: "bg-red-500 text-white hover:bg-red-600",
-    "danger-outlined": "border border-red-500 text-red-500 hover:bg-red-100/50",
+    "danger-outlined": "border border-red-500 text-red-500 hover:bg-red-500/80 hover:text-white",
   };
 
   const sizeStyles = {

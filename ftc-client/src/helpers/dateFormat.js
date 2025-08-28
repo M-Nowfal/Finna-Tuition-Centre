@@ -10,6 +10,19 @@ export const getMonth = (month) => {
   }
 };
 
+export const getToDay = (day) => {
+  try {
+    const days = [
+      "Monday", "Tuesday", "Wednesday", 
+      "Thursday", "Friday", "Saturday",
+      "Sunday"
+    ];
+    return days[day - 1];
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const getMonthNumber = (month) => {
   try {
     const months = {

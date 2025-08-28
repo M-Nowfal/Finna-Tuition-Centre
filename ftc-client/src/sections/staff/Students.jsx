@@ -7,6 +7,7 @@ import EditStudent from "./EditStudent";
 import axios from "axios";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
 import FeePaymentForm from "./FeePaymentForm";
+import StdandSecLayout from "../../layouts/StdandSecLayout";
 
 const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }) => {
 
@@ -51,19 +52,6 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }
     setFilteredStudents(students);
   }, [students]);
 
-  const markAttendance = async (id, success) => {
-    let flag = null;
-    try {
-      setLoading(true);
-      // API call to mark attendance
-    } catch (err) {
-      flag = err;
-    } finally {
-      setLoading(false);
-      success(flag);
-    }
-  };
-
   const handleSearchStudent = (e) => {
     const { value } = e.target;
     setSearch(value);
@@ -94,45 +82,16 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }
           setStudents={setStudents}
         />
       )}
-      <div className="flex relative z-10 max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
-        {[9, 10, 11, 12].map(std => (
-          <Button
-            key={std}
-            variant={selectedStd === std ? "contained" : "secondary"}
-            className="flex-1 text-gray-400"
-            onClick={() => setSelectedStd(std)}
-          >
-            {std}<sup>th</sup>{(selectedStd === std && selectedSection !== "All") && <span>&nbsp; {selectedSection}</span>}
-            {(selectedStd === std && showSections) ? (
-              <ChevronUp 
-                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
-                onClick={() => setShowSections(false)}
-              />
-            ) : (
-              selectedStd === std && <ChevronDown
-                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
-                onClick={() => setShowSections(true)}
-              />
-            )}
-          </Button>
-        ))}
-      </div>
-      {showSections && <div className="absolute inset-0" role="button" onClick={() => setShowSections(false)}></div>}
-      {showSections && <div className="relative w-80 z-10 flex m-auto mb-3 gap-1 bg-gray-100 text-white p-1 rounded-md shadow-lg">
-        {["All", "A", "B", "C"].map(section => (
-          <Button
-            key={section}
-            variant={selectedSection === section ? "contained" : "secondary"}
-            className="flex-1"
-            onClick={() => {
-              setSelectedSection(section);
-              setShowSections(false);
-            }}
-          >
-            {section}
-          </Button>
-        ))}
-      </div>}
+      
+      <StdandSecLayout
+        selectedStd={selectedStd}
+        setSelectedStd={setSelectedStd}
+        selectedSection={selectedSection}
+        setSelectedSection={setSelectedSection}
+        showSections={showSections}
+        setShowSections={setShowSections}
+      />
+
       <div className="flex justify-between items-center">
         <div className="flex flex-col gap-2">
           <span className="font-bold text-2xl md:text-3xl">
@@ -182,16 +141,14 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }
         {filteredStudents.length !== 0 && (
           filteredStudents.map(({
             _id, name, std, section, roll_no, parent, phone, join_date,
-            feeMonth, feeRupee, attendance, isActive, feePaidDate, school
+            feeMonth, feeRupee, isActive, feePaidDate, school
           }) => (
             <StudentCard
               key={_id} _id={_id} name={name}
               std={std} section={section} roll_no={roll_no}
               parent={parent} phone={phone} join_date={join_date.split("T")[0]}
               feeRupee={feeRupee} feeMonth={feeMonth}
-              attendance={attendance}
               shortName={firstTwoLettersOfName(name)}
-              markAttendance={markAttendance}
               setShowEditStudentForm={setShowEditStudentForm}
               setEditingStudentDetails={setEditingStudentDetails}
               setConfirmFeesPaid={setConfirmFeesPaid}

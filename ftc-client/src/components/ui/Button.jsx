@@ -13,11 +13,11 @@ const Button = ({
     "font-medium rounded-md transition-all duration-200 focus:outline-none";
 
   const variantStyles = {
-    contained: "bg-sky-600 text-white hover:bg-sky-700",
-    success: "bg-green-700 text-white hover:bg-green-900",
+    contained: "bg-sky-600 text-white hover:bg-sky-700 border",
+    success: "bg-green-700 text-white hover:bg-green-900 border",
     secondary: "bg-gray-200 text-gray-700 hover:bg-gray-300",
     "secondary-outlined": "border border-gray-400 hover:bg-gray-200",
-    outlined: "border border-sky-600 text-sky-600 hover:bg-sky-100",
+    outlined: "border border-sky-600 text-sky-600 hover:bg-sky-100 hover:text-sky-900",
     transparent: "bg-transparent",
     danger: "bg-red-500 text-white hover:bg-red-600",
     "danger-outlined": "border border-red-500 text-red-500 hover:bg-red-500/80 hover:text-white",
@@ -31,8 +31,8 @@ const Button = ({
   };
 
   const finalClassName = `
-    ${baseStyles} ${variantStyles[variant]} 
-    ${sizeStyles[size]} ${disabled ? "opacity-50 cursor-not-allowed" : ""} 
+    ${baseStyles} ${variantStyles[variant]}
+    ${sizeStyles[size]} ${disabled ? "opacity-50 cursor-not-allowed" : ""}
     ${className} cursor-pointer flex items-center justify-center
   `;
 

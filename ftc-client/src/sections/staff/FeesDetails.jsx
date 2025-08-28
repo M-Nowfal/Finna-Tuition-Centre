@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { firstTwoLettersOfName } from "../../helpers/stringFormat";
 import axios from "axios";
 import FeePaymentForm from "./FeePaymentForm";
+import StdandSecLayout from "../../layouts/StdandSecLayout";
 
 const FeesDetails = () => {
 
@@ -157,45 +158,14 @@ const FeesDetails = () => {
 
   return (
     <div className="p-3">
-      <div className="flex relative z-10 max-w-2xl m-auto bg-gray-100 gap-3 p-1 rounded-lg mb-3">
-        {[9, 10, 11, 12].map(std => (
-          <Button
-            key={std}
-            variant={selectedStd === std ? "contained" : "secondary"}
-            className="flex-1 text-gray-400"
-            onClick={() => setSelectedStd(std)}
-          >
-            {std}<sup>th</sup>{(selectedStd === std && selectedSection !== "All") && <span>&nbsp; {selectedSection}</span>}
-            {(selectedStd === std && showSections) ? (
-              <ChevronUp
-                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
-                onClick={() => setShowSections(false)}
-              />
-            ) : (
-              selectedStd === std && <ChevronDown
-                className="size-5 relative -right-2.5 md:-right-5 hover:bg-sky-500 h-full rounded"
-                onClick={() => setShowSections(true)}
-              />
-            )}
-          </Button>
-        ))}
-      </div>
-      {showSections && <div className="absolute inset-0" role="button" onClick={() => setShowSections(false)}></div>}
-      {showSections && <div className="relative w-80 z-10 flex m-auto mb-3 gap-1 bg-gray-100 text-white p-1 rounded-md shadow-lg">
-        {["All", "A", "B", "C"].map(section => (
-          <Button
-            key={section}
-            variant={selectedSection === section ? "contained" : "secondary"}
-            className="flex-1"
-            onClick={() => {
-              setSelectedSection(section);
-              setShowSections(false);
-            }}
-          >
-            {section}
-          </Button>
-        ))}
-      </div>}
+      <StdandSecLayout
+        selectedStd={selectedStd}
+        setSelectedStd={setSelectedStd}
+        selectedSection={selectedSection}
+        setSelectedSection={setSelectedSection}
+        showSections={showSections}
+        setShowSections={setShowSections}
+      />
       <div className="bg-gray-50 flex flex-col gap-3">
         <div className="flex flex-col gap-2 ps-2">
           <span className="text-3xl font-bold">Fees Management</span>

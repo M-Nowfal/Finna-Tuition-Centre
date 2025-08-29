@@ -13,10 +13,10 @@ import { getMonth } from "../../helpers/dateFormat";
 
 const StudentCard = ({
   _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth,
-  shortName, setShowEditStudentForm, setEditingStudentDetails, 
+  shortName, setShowEditStudentForm, setEditingStudentDetails, admin,
   setConfirmFeesPaid, setLastFeeDetails, isActive, feePaidDate, school
 }) => {
-  const paid = feeMonth;  
+  const paid = feeMonth;
   const currentMonth = (feeMonth == new Date().getMonth() + 1);
 
   return (
@@ -41,12 +41,15 @@ const StudentCard = ({
             </div>
           </div>
         </div>
-        <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
-          <Edit className="text-gray-400 size-4" onClick={() => {
-            setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, feePaidDate, isActive, school });
-            setShowEditStudentForm(prev => !prev);
-          }} />
-        </div>
+        {admin && <div className="rounded-md p-2 hover:bg-sky-100 transition-all duration-200 cursor-pointer">
+          <Edit
+            className="text-gray-400 size-4"
+            onClick={() => {
+              setEditingStudentDetails({ _id, name, std, section, roll_no, parent, phone, join_date, feeRupee, feeMonth, feePaidDate, isActive, school });
+              setShowEditStudentForm(prev => !prev);
+            }}
+          />
+        </div>}
       </div>
       <div className="flex items-center gap-2">
         <School className="text-gray-400 size-4" />
@@ -66,7 +69,7 @@ const StudentCard = ({
       </div>
       <div className="flex items-center gap-2">
         <IndianRupee className="text-gray-400 size-4" />
-        <p className="text-gray-700 text-sm">{paid ? `${feeRupee} paid for ${getMonth(feeMonth)} on ${feePaidDate?? "00-00-0000"}` : `Pending`}</p>
+        <p className="text-gray-700 text-sm">{paid ? `${feeRupee} paid for ${getMonth(feeMonth)} on ${feePaidDate ?? "00-00-0000"}` : `Pending`}</p>
       </div>
       <div className="flex gap-2 my-2">
         <div
@@ -95,7 +98,7 @@ const StudentCard = ({
             setConfirmFeesPaid(true);
             setLastFeeDetails({ _id, name, std, section, roll_no, feeMonth, join_date });
           }}
-          disabled={!isActive || (paid && currentMonth)}
+          disabled={!admin || !isActive || (paid && currentMonth)}
         >
           {(paid && currentMonth) ? "Paid" : "Mark Paid"}
         </Button>}

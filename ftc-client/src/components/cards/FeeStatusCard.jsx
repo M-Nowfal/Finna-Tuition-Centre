@@ -4,7 +4,7 @@ import { getMonth } from "../../helpers/dateFormat";
 
 const FeeStatusCard = ({
   _id, name, shortName, roll_no, std, section, feeMonth, feePaidDate,
-  join_date, setConfirmFeesPaid, setFeeDetails, isActive, paymentMethod
+  join_date, setConfirmFeesPaid, setFeeDetails, isActive, paymentMethod, admin
 }) => {
 
   const paid = (feeMonth == new Date().getMonth() + 1);
@@ -46,19 +46,23 @@ const FeeStatusCard = ({
             {paid ? <CircleCheck className="size-3" /> : <CircleX className="size-3" />}
             {paid ? `Paid for ${getMonth(feeMonth)}` : `Pending for ${feeMonth ? getMonth(feeMonth + 1) : getMonth(Number(join_date.split("T")[0].slice(5, 7)))}`}
           </div>
-          {!paid ? <Button variant="success" size="sm"
-            onClick={() => {
-              setFeeDetails({
-                _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
-              });
-              setConfirmFeesPaid(true);
-            }}
-            disabled={!isActive}
-          >
-            Mark Paid
-          </Button> : <Button variant="secondary" size="sm">
-            Fees Paid
-          </Button>}
+          {!paid ? (
+            <Button variant="success" size="sm"
+              onClick={() => {
+                setFeeDetails({
+                  _id, name, roll_no, std, section, feeMonth, feeRupee, join_date
+                });
+                setConfirmFeesPaid(true);
+              }}
+              disabled={!admin || !isActive}
+            >
+              Mark Paid
+            </Button>
+          ) : (
+            <Button variant="secondary" size="sm">
+              Fees Paid
+            </Button>
+          )}
         </div>
       </div>
     </div>

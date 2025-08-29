@@ -6,7 +6,8 @@ const staffSchema = new mongoose.Schema({
   phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  staff_id: { type: String, required: true }
+  staff_id: { type: String, required: true },
+  isVerified: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // staff model creation

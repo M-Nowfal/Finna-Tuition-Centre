@@ -24,9 +24,12 @@ const Login = () => {
   useEffect(() => {
     if (search.get("role") === "staff") setFtcRole("Staff");
     if (ftcAuthRole?.staff_id?.includes("STF")) {
-      navigate("/dashboard/staff", { state: { role: "staff" }});
+      if (ftcAuthRole?.staff_id === String(import.meta.env.VITE_ADMIN_ID))
+        navigate("/dashboard/staff", { state: { role: "staff", admin: true } });
+      else
+        navigate("/dashboard/staff", { state: { role: "staff", admin: false } });
     } else if (ftcAuthRole?.roll_no?.includes("FTC")) {
-      navigate("/dashboard/student", { state: { role: "student", student: ftcAuthRole }});
+      navigate("/dashboard/student", { state: { role: "student", student: ftcAuthRole } });
     }
   }, []);
 
@@ -45,11 +48,14 @@ const Login = () => {
       if (role === "student") {
         localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.student));
         setFtcAuthRole(res.data.student);
-        navigate(`/dashboard/${role}`, { state: { role, student: res.data.student }});
+        navigate(`/dashboard/${role}`, { state: { role, student: res.data.student } });
       } else if (role === "staff") {
         localStorage.setItem("ftcAuthRole", JSON.stringify(res.data.staff));
         setFtcAuthRole(res.data.staff);
-        navigate(`/dashboard/${role}`, { state: { role }});
+        if (res.data.staff.staff_id === String(import.meta.env.VITE_ADMIN_ID))
+          navigate(`/dashboard/${role}`, { state: { role, admin: true } });
+        else
+          navigate(`/dashboard/${role}`, { state: { role, admin: false } });
       }
       toast.success(res.data.message);
     } catch (err) {

@@ -1,5 +1,5 @@
-import { Calendar, Copy, Loader2, Users, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Calendar, Copy, Loader2, Save, Users, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../../components/ui/Button";
 import axios from "axios";
 import StdandSecLayout from "../../layouts/StdandSecLayout";
@@ -16,8 +16,7 @@ const Attendance = () => {
   const [showSections, setShowSections] = useState();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [attendance, setAttendance] = useState({});
-  const [todayAttendance, setTodayAttendance] = useState({ present: 0, absent: 0 });
+  const [attendance, setAttendance] = useState({ present: 0, absent: 0 });
   const [subject, setSubject] = useState("");
   const [finalAttendance, setFinalAttendance] = useState({
     std: 9,
@@ -32,6 +31,9 @@ const Attendance = () => {
   });
   const [showAttendance, setShowAttendance] = useState(false);
   const stdRoman = { 9: "IX", 10: "X", 11: "XI", 12: "XII" };
+  const selectedSubject = useRef();
+  const [copy, setCopy] = useState(false);
+  let timeOut = null;
 
   useEffect(() => {
     (async () => {
@@ -40,15 +42,22 @@ const Attendance = () => {
         const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/getstudents/${selectedStd}?section=${selectedSection}`);
         const activeStudents = res.data.students.filter(student => student.isActive);
         setStudents(activeStudents || []);
+        setAttendance({ present: 0, absent: 0 });
         res.data.students.map(student => {
           const id = student._id;
           student.isActive && setAttendance(prev => ({ ...prev, [`${id}`]: false }));
         });
-        setTodayAttendance(prev => ({ present: 0, absent: activeStudents.length }));
+        setAttendance(prev => ({ ...prev, present: 0, absent: activeStudents.length }));
         setFinalAttendance(prev => ({
           ...prev,
+          date: `${date.getDate()}-${getMonth(date.getMonth() + 1)}-${date.getFullYear()}`,
           no_on_roll: activeStudents.length,
-          no_of_present: 0, no_of_absent: activeStudents.length
+          no_of_present: 0,
+          no_of_absent: activeStudents.length,
+          absentees: [],
+          std: selectedStd,
+          section: selectedSection,
+          subject: selectedSubject
         }));
       } catch (err) {
         const error = err.response?.data?.error || err.message;
@@ -57,21 +66,27 @@ const Attendance = () => {
         setLoading(false);
       }
     })();
+
+    return () => clearTimeout(timeOut);
   }, [selectedStd, selectedSection]);
 
   const markPresent = (id) => {
     setAttendance(prev => {
-      if (!prev[id])
-        setTodayAttendance({
-          present: todayAttendance.present + 1,
-          absent: todayAttendance.absent - 1
-        });
-      else
-        setTodayAttendance({
-          present: todayAttendance.present - 1,
-          absent: todayAttendance.absent + 1
-        });
-      return { ...prev, [id]: !prev[id] };
+      let present = 0;
+      let absent = 0;
+      if (!prev[id]) {
+        present = prev["present"] + 1;
+        absent = prev["absent"] - 1;
+      } else {
+        present = prev["present"] - 1;
+        absent = prev["absent"] + 1;
+      }
+      return {
+        ...prev,
+        [id]: !prev[id],
+        present,
+        absent
+      };
     });
   };
 
@@ -80,12 +95,13 @@ const Attendance = () => {
       const id = student._id;
       setAttendance(prev => ({ ...prev, [`${id}`]: true }));
     });
-    setTodayAttendance({ present: students.length, absent: 0 });
+    setAttendance(prev => ({ ...prev, present: students.length, absent: 0 }));
   };
 
   const getAbsentees = () => {
     const absentees = [];
     for (const atd in attendance) {
+      if (atd === "absent" || atd === "present") continue;
       if (!attendance[atd])
         absentees.push(atd);
     }
@@ -95,6 +111,7 @@ const Attendance = () => {
   const generateAttendance = () => {
     if (!subject) {
       toast.warning("Select today's Subject");
+      selectedSubject.current.focus();
       return;
     }
     setFinalAttendance({
@@ -104,8 +121,8 @@ const Attendance = () => {
       day: `${date.getDay()}`,
       subject,
       no_on_roll: students.length,
-      no_of_present: todayAttendance.present,
-      no_of_absent: todayAttendance.absent,
+      no_of_present: attendance.present,
+      no_of_absent: attendance.absent,
       absentees: getAbsentees()
     });
     setShowAttendance(true);
@@ -118,40 +135,83 @@ const Attendance = () => {
     }
   };
 
-  const handleCopy = () => {
-    const absenteesList = finalAttendance.absentees.map((id, index) => `${index + 1}. ${getNameById(id)}`).join("\n\t");
-    navigator.clipboard.writeText(`
+  const getAttendance = () => {
+    const absenteesList = finalAttendance.absentees.map((id, index) => `  ${index + 1}. ${getNameById(id)}`).join("\n  ");
+    return (`
 *${stdRoman[finalAttendance.std]} STD ${finalAttendance.section} Attendance*
-
-  *Date          :* ${finalAttendance.date}
-  *Day           :* ${getToDay(date.getDay())}
-  *Subject       :* ${finalAttendance.subject} 
-  *No:on:roll    :* ${finalAttendance.no_on_roll}
+*------------------------*
+  *Date              :* ${finalAttendance.date}
+  *Day               :* ${getToDay(date.getDay())}
+  *Subject          :* ${finalAttendance.subject} 
+  *No:on:roll      :* ${finalAttendance.no_on_roll}
   *No:of:present :* ${finalAttendance.no_of_present}
   *No:of:absent  :* ${finalAttendance.no_of_absent}
 
 *Absentees*
-  ${absenteesList}
+  ${absenteesList} ${!absenteesList ? "NILL" : ""}
     `);
-    toast.success("Attendance copied to clipboard");
+  };
+
+  const handleCopy = () => {
+    try {
+      navigator.clipboard.writeText(getAttendance());
+      toast.success("Attendance copied to clipboard");
+      setCopy(true);
+      timeOut = setTimeout(() => { setCopy(false) }, 2500);
+    } catch (err) {
+      setCopy(false);
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/staff/update-attendance?std=${selectedStd}&section=${selectedSection}&date=${finalAttendance.date}`,
+        { attendance: getAttendance().replaceAll("*", "") }
+      );
+      toast.success(res.data.message);
+    } catch (err) {
+      const error = err.response?.data?.error || err.message;
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const showPastAttendance = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/staff/get-attendance?date=${finalAttendance.date}&std=${selectedStd}&section=${selectedSection}`);
+      // Show the attendance
+    } catch (err) {
+      const error = err.response?.data?.error || err.message;
+      toast.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex flex-col gap-5 p-5">
-      <div className="flex gap-2 items-center">
-        <Calendar className="text-emerald-600" />
-        <span className="text-2xl font-semibold">
-          Attendance for&nbsp;
-          <span className="font-bold text-sky-900 border border-gray-300 bg-sky-100 px-2 rounded-md">
-            {today}
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2 items-center">
+          <Calendar className="text-emerald-600" />
+          <span className="text-2xl font-semibold">
+            <span>Attendance for&nbsp;</span>
+            <span className="font-bold text-sky-900 border border-gray-300 bg-sky-100 px-2 rounded-md">
+              {today}
+            </span>
           </span>
-        </span>
+        </div>
+        {/* <div className="bg-emerald-200 py-1 px-2 rounded-lg hover:shadow-md">
+          <button className="text-sm font-semibold text-emerald-900 cursor-pointer" title="View Past Attendance">Past Atd</button>
+        </div> */}
       </div>
 
       {/* Attendance */}
       {showAttendance && (
         <div className="fixed flex flex-col z-10 p-4 justify-center items-center min-h-svh inset-0 bg-black/30">
-          <div className="w-full max-h-[70vh] max-w-2xl">
+          <div className="w-full max-w-2xl">
             <div
               className="w-fit ms-auto cursor-pointer bg-sky-50 p-1 rounded-lg transition-all duration-200 mb-2"
               role="button"
@@ -159,7 +219,7 @@ const Attendance = () => {
             >
               <X className="text-black size-5" />
             </div>
-            <div className="flex flex-col items-center bg-white p-5 border border-gray-400 shadow rounded-2xl gap-3 w-full md:w-2xl">
+            <div className="flex max-h-[80vh] scrollbar-hide overflow-auto flex-col items-center bg-white p-5 border border-gray-400 shadow rounded-2xl gap-3 w-full md:w-2xl">
               <div className="flex gap-4 items-center justify-between w-full">
                 <div className="flex items-center gap-3">
                   <Calendar className="text-emerald-500 size-8" />
@@ -167,7 +227,7 @@ const Attendance = () => {
                 </div>
                 <span className="font-bold text-emerald-900 border border-gray-300 bg-emerald-100 text-2xl px-2 rounded-md">{today}</span>
               </div>
-              <div className="flex flex-col gap-5 bg-sky-100 p-5 rounded-lg border border-gray-200 shadow w-full md:w-md">
+              <div className="flex flex-col overflow-auto scrollbar-hide gap-5 bg-sky-100 p-5 rounded-lg border border-gray-200 shadow w-full">
                 <h2 className="flex text-xl font-bold items-center gap-2">
                   <p>{stdRoman[finalAttendance.std]}</p> STD <p>{finalAttendance.section}</p> Attendance
                 </h2>
@@ -202,17 +262,28 @@ const Attendance = () => {
                       {finalAttendance.absentees.map(absentees => (
                         getNameById(absentees) && <li key={absentees}>{getNameById(absentees)}</li>
                       ))}
+                      {finalAttendance.absentees.length === 0 && <span>NILL</span>}
                     </ol>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-end w-full">
+              <div className="flex justify-between w-full gap-2">
+                <Button
+                  variant="success"
+                  size="sm"
+                  className="w-2/6 flex gap-1 items-center"
+                  disabled={loading}
+                  onClick={handleSave}
+                >
+                  <Save className="size-5" /> Save
+                </Button>
                 <Button
                   variant="contained"
-                  size="xs"
+                  size="sm"
                   className="flex gap-1 items-center"
                   onClick={handleCopy}
-                ><Copy size={17} /> Copy</Button>
+                  disabled={copy}
+                ><Copy size={17} /> {copy ? "Copied" : "Copy"}</Button>
               </div>
             </div>
           </div>
@@ -233,7 +304,11 @@ const Attendance = () => {
           name="subject"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          className="flex-1 max-w-xl border p-2 font-semibold border-gray-300 rounded-md"
+          className="
+            flex-1 max-w-xl border p-2 font-semibold border-gray-300 rounded-md 
+            focus:ring-sky-600 focus:ring-3 focus:ring-offset-3 focus:outline
+          "
+          ref={(el) => selectedSubject.current = el}
         >
           <option value="">Select Today's Subject</option>
           <option value="Tamil">Tamil</option>
@@ -243,11 +318,11 @@ const Attendance = () => {
           <option value="Social Science">Social Science</option>
         </select>
         <Button
-          variant={students.length === todayAttendance.present ? "success" : "contained"}
+          variant={students.length === attendance.present ? "success" : "contained"}
           size="sm"
           onClick={markAllPresent}
         >
-          {students.length === todayAttendance.present ? "All Present" : "Mark All Present"}
+          {students.length === attendance.present ? "All Present" : "Mark All Present"}
         </Button>
       </div>
       <div className="flex justify-center items-center">
@@ -295,11 +370,11 @@ const Attendance = () => {
           </div>
           <div className="flex justify-between items-center">
             <span className="text-2xl font-semibold">No:of:Present</span>
-            <span className="text-3xl font-bold">{todayAttendance.present}</span>
+            <span className="text-3xl font-bold">{attendance.present}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-2xl font-semibold">No:of:absent</span>
-            <span className="text-3xl font-bold">{todayAttendance.absent}</span>
+            <span className="text-3xl font-bold">{attendance.absent}</span>
           </div>
         </div>
         <Button

@@ -9,7 +9,7 @@ import { firstTwoLettersOfName } from "../../helpers/stringFormat";
 import FeePaymentForm from "./FeePaymentForm";
 import StdandSecLayout from "../../layouts/StdandSecLayout";
 
-const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }) => {
+const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn, admin }) => {
 
   const [loading, setLoading] = useState(false);
   const [showEditStudentForm, setShowEditStudentForm] = useState(false);
@@ -120,6 +120,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }
           size="sm"
           className="gap-1"
           onClick={() => setShowStudentAddForm(true)}
+          disabled={!admin}
         >
           <Plus className="size-5 sm:size-4" />
           <span className="hidden sm:flex text-sm">Add Student</span>
@@ -156,6 +157,7 @@ const Students = ({ showStudentAddForm, setShowStudentAddForm, showScrollUpBtn }
               isActive={isActive}
               feePaidDate={feePaidDate}
               school={school}
+              admin={admin}
             />
           ))
         )}

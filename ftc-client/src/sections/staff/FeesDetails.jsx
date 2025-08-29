@@ -9,7 +9,7 @@ import axios from "axios";
 import FeePaymentForm from "./FeePaymentForm";
 import StdandSecLayout from "../../layouts/StdandSecLayout";
 
-const FeesDetails = () => {
+const FeesDetails = ({ admin }) => {
 
   const [feesOverviewsValues, setFeesOverviewsValues] = useState({
     total_student: 0, fee_paid: 0, fee_pending: 0, revenue: 0
@@ -256,6 +256,7 @@ const FeesDetails = () => {
                 setFeeDetails={setFeeDetails}
                 isActive={isActive}
                 paymentMethod={paymentMethod}
+                admin={admin}
               />
             ))}
           </div>

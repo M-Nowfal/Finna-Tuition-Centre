@@ -12,10 +12,11 @@ const NUMBERS = [
   process.env.NUM_7,
   process.env.NUM_8,
   process.env.NUM_9,
+  process.env.NUM_10,
 ];
 
 const isValidStaffNumber = (number) => {
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < NUMBERS.length; i++) {
     if (number == NUMBERS[i]) 
       return true;
   }

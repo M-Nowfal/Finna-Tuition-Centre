@@ -5,7 +5,7 @@ import Login from "../pages/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import PageNotFound from "../pages/PageNotFound";
 import Student from "../pages/Student";
-import Satff from "../pages/Satff";
+import Staff from "../pages/Staff";
 import Registration from "../pages/Registration";
 import Review from "../pages/Review";
 
@@ -32,7 +32,7 @@ const Routes = () => {
       element: <DashboardLayout />,
       children: [
         { path: "student", element: <Student /> },
-        { path: "staff", element: <Satff /> },
+        { path: "staff", element: <Staff /> },
       ],
     },
     {

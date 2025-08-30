@@ -400,34 +400,38 @@ const Attendance = () => {
                 </Button>
               </div>
               {loading && <Loader className="animate-spin my-4 size-10 text-sky-700" />}
-              {pastAttendance && <div className="p-3 bg-sky-100 rounded-lg w-full flex flex-col gap-3">
-                <h2 className="text-2xl font-bold">{pastAttendance?.std}</h2>
-                <div className="font-semibold text-lg">
-                  <p><span className="font-bold">Date :</span> {pastAttendance?.details?.date}</p>
-                  <p><span className="font-bold">Day :</span> {pastAttendance?.details?.day}</p>
-                  <p><span className="font-bold">Subject :</span> {pastAttendance?.details?.subject}</p>
-                  <p><span className="font-bold">No:on:roll :</span> {pastAttendance?.details?.no_on_roll}</p>
-                  <p><span className="font-bold">No:of:present :</span> {pastAttendance?.details?.no_of_present}</p>
-                  <p><span className="font-bold">No:of:absent :</span> {pastAttendance?.details?.no_of_absent}</p>
-                </div>
-                <div>
-                  <p className="text-xl font-bold">Absentees</p>
-                  <ol className="ps-7 list-decimal">
-                    {pastAttendance?.absentees.map(absent => (
-                      <li key={absent}>{absent}</li>
-                    ))}
-                  </ol>
-                </div>
-                <Button
-                  variant="contained"
-                  size="xs"
-                  className="ms-auto"
-                  onClick={handleCopyPastAttendance}
-                  disabled={copy}
-                ><Copy size={16} className="me-1" />
-                  {copy ? "Copied" : "Copy"}
-                </Button>
-              </div>}
+              {pastAttendance && (
+                <>
+                  <div className="p-3 bg-sky-100 max-h-[50vh] overflow-auto scrollbar-hide rounded-lg w-full flex flex-col gap-3">
+                    <h2 className="text-2xl font-bold">{pastAttendance?.std}</h2>
+                    <div className="font-semibold text-lg">
+                      <p><span className="font-bold">Date :</span> {pastAttendance?.details?.date}</p>
+                      <p><span className="font-bold">Day :</span> {pastAttendance?.details?.day}</p>
+                      <p><span className="font-bold">Subject :</span> {pastAttendance?.details?.subject}</p>
+                      <p><span className="font-bold">No:on:roll :</span> {pastAttendance?.details?.no_on_roll}</p>
+                      <p><span className="font-bold">No:of:present :</span> {pastAttendance?.details?.no_of_present}</p>
+                      <p><span className="font-bold">No:of:absent :</span> {pastAttendance?.details?.no_of_absent}</p>
+                    </div>
+                    <div>
+                      <p className="text-xl font-bold">Absentees</p>
+                      <ol className="ps-7 list-decimal">
+                        {pastAttendance?.absentees.map(absent => (
+                          <li key={absent}>{absent}</li>
+                        ))}
+                      </ol>
+                    </div>
+                  </div>
+                  <Button
+                    variant="contained"
+                    size="xs"
+                    className="ms-auto"
+                    onClick={handleCopyPastAttendance}
+                    disabled={copy}
+                  ><Copy size={16} className="me-1" />
+                    {copy ? "Copied" : "Copy"}
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

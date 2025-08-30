@@ -1,6 +1,6 @@
 import Button from "./Button";
 
-const Alert = ({ title, msg, btn, proceed, setShowAlert, cancel = true, important }) => {
+const Alert = ({ title, msg, btn, onProceed, onCancel, cancel = true, important }) => {
 
   return (
     <div className="fixed flex z-20 justify-center items-center h-screen inset-0 bg-black/60">
@@ -10,8 +10,8 @@ const Alert = ({ title, msg, btn, proceed, setShowAlert, cancel = true, importan
           <span className="text-lg font-bold text-emerald-500">{important}</span>
         </p>
         <div className="flex justify-end gap-3 mt-5">
-          {cancel && <Button variant="outlined" size="xs" onClick={() => setShowAlert(false)}>Cancel</Button>}
-          <Button variant={cancel ? `danger-outlined` : "contained"} size="xs" onClick={proceed}>{btn}</Button>
+          <Button variant="secondary-outlined" size="xs" onClick={onCancel}>Cancel</Button>
+          <Button variant={cancel ? `danger-outlined` : "contained"} size="xs" onClick={onProceed}>{btn}</Button>
         </div>
       </div>
     </div>

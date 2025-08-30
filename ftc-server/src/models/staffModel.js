@@ -7,7 +7,8 @@ const staffSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   staff_id: { type: String, required: true },
-  isVerified: { type: Boolean, default: false }
+  isVerified: { type: Boolean, default: false },
+  admin: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // staff model creation

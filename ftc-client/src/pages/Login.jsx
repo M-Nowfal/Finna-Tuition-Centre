@@ -26,8 +26,12 @@ const Login = () => {
     if (ftcAuthRole?.staff_id?.includes("STF")) {
       if (ftcAuthRole?.staff_id === String(import.meta.env.VITE_ADMIN_ID))
         navigate("/dashboard/staff", { state: { role: "staff", admin: true } });
-      else
-        navigate("/dashboard/staff", { state: { role: "staff", admin: false } });
+      else {
+        if (ftcAuthRole?.admin)
+          navigate("/dashboard/staff", { state: { role: "staff", admin: true } });
+        else
+          navigate("/dashboard/staff", { state: { role: "staff", admin: false } });
+      }
     } else if (ftcAuthRole?.roll_no?.includes("FTC")) {
       navigate("/dashboard/student", { state: { role: "student", student: ftcAuthRole } });
     }
@@ -54,8 +58,12 @@ const Login = () => {
         setFtcAuthRole(res.data.staff);
         if (res.data.staff.staff_id === String(import.meta.env.VITE_ADMIN_ID))
           navigate(`/dashboard/${role}`, { state: { role, admin: true } });
-        else
-          navigate(`/dashboard/${role}`, { state: { role, admin: false } });
+        else {
+          if (res.data.staff.admin)
+            navigate(`/dashboard/${role}`, { state: { role, admin: true } });
+          else
+            navigate(`/dashboard/${role}`, { state: { role, admin: false } });
+        }
       }
       toast.success(res.data.message);
     } catch (err) {
@@ -214,6 +222,7 @@ const Login = () => {
             <Button variant="contained" type="submit">
               Sign In as {ftcRole}
             </Button>
+            {ftcRole === "Staff" && <Link to={"/forgot-password"} className="text-center text-sm text-sky-600 mt-3 hover:underline">Forgot Password</Link>}
           </div>
           {ftcRole !== "Student" && (
             <div>

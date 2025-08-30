@@ -135,13 +135,12 @@ export const updateStaff = async (req, res, next) => {
 // api/staff/update-attenadnce post-method
 export const updateAttendance = async (req, res, next) => {
   try {
-    const { std, section, date } = req.query;
-    const { attendance } = req.body;
-    const atd = await attendanceModel.findOne({ date, std, section });
-    if (atd) 
-      return res.status(429).json({ error: "Already updated" });
-    await attendanceModel.create({ std, section, date, attendance });
-    res.status(201).json({ message: "Attendance updated" });
+    const { std, details, absentees } = req.body;
+    const atd = await attendanceModel.findOne({ std, "details.date": details.date });
+    if (atd)
+      return res.status(429).json({ error: "Attendance already updated for today" });
+    await attendanceModel.create({ std, details, absentees });
+    res.status(201).json({ message: "Attendance Stored successfully!" });
   } catch (err) {
     next(err);
   }
@@ -150,10 +149,10 @@ export const updateAttendance = async (req, res, next) => {
 // api/staff/get-attenadnce get-method
 export const getAttendance = async (req, res, next) => {
   try {
-    const { date, std, section } = req.query;
-    const atd = await attendanceModel.findOne({ std, section, date });
-    if (!atd) 
-      return res.status(400).json({ error: "Attendance Not available for the specified date" });
+    const { std, date } = req.query;
+    const atd = await attendanceModel.findOne({ std, "details.date": date });
+    if (!atd)
+      return res.status(400).json({ error: "Attendance Not available for the specified date or class" });
     res.status(200).json({ message: "Attendance fetched", attendance: atd });
   } catch (err) {
     next(err);

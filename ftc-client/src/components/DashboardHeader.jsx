@@ -95,9 +95,9 @@ const DashboardHeader = ({ role, setShowSideBar }) => {
       {showAlert && <Alert
         title="Logout"
         msg="Are you sure to logut the current session"
-        proceed={logout}
+        onProceed={logout}
         btn="Logout"
-        setShowAlert={setShowAlert}
+        onCancel={() => setShowAlert(false)}
       />}
       {showEditStaffForm && <EditStaff 
         old_details={ftcAuthRole}

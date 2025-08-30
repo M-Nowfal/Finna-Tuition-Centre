@@ -297,8 +297,8 @@ const EditStudent = ({ editingStudentDetails, setShowEditStudentForm, setStudent
         title="Remove Student"
         msg="Are you sure to remove the student permanently, if you remove the student then all data related to that student will be deleted."
         btn="Remove"
-        proceed={handleRemoveStudent}
-        setShowAlert={setShowAlert}
+        onProceed={handleRemoveStudent}
+        onCancel={() => setShowAlert(false)}
       />}
     </div>
   );

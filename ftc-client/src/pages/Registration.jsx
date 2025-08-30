@@ -211,7 +211,7 @@ const Registration = () => {
       {showAlert && <Alert 
         title="Staff Reg:No"
         msg="Your permenant staff Reg:No is"
-        proceed={() => {
+        onProceed={() => {
           setShowAlert(false);
           navigate("/login?role=staff");
         }}

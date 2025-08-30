@@ -5,10 +5,11 @@ import Button from "../../components/ui/Button";
 import { BouncingDots } from "../../components/ui/Loader";
 import { AlertCircle, Edit, X } from "lucide-react";
 import { FTCAppContext } from "../../contexts/AppContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const EditStaff = ({ old_details, setShowEditStaffForm }) => {
 
-  const { setFtcAuthRole } = useContext(FTCAppContext);
+  const { ftcAuthRole, setFtcAuthRole } = useContext(FTCAppContext);
   const [details, setDetails] = useState({
     name: old_details.name,
     phone: old_details.phone,
@@ -16,6 +17,7 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     try {
@@ -94,6 +96,14 @@ const EditStaff = ({ old_details, setShowEditStaffForm }) => {
             className="outline outline-gray-300 focus:outline-sky-500 p-2 rounded-lg inp-element"
           />
         </div>
+          <Button 
+            variant="secondary"
+            size="sm"
+            className="w-fit mt-3"
+            onClick={() => navigate("/reset-password", { state: { authorized: true, id: ftcAuthRole._id } })}
+          >
+            Change Password
+          </Button>
         {error && (
           <div className="border border-red-400 p-4 rounded-xl flex gap-3 mt-3">
             <AlertCircle className="size-4 text-red-500 mt-0.5" />

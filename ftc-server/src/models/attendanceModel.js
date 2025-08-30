@@ -2,10 +2,16 @@ import mongoose from "mongoose";
 
 // attenadnce schema creation
 const attendanceSchema = new mongoose.Schema({
-  std: { type: Number, enum: [9, 10, 11, 12], required: true },
-  section: { type: String, enum: ["A", "B", "C"] },
-  date: { type: String, required: true },
-  attendance: { type: String, required: true }
+  std: { type: String, required: true },
+  details: {
+    date: { type: String, required: true },
+    day: { type: String, required: true },
+    subject: { type: String, required: true },
+    no_on_roll: { type: Number, required: true },
+    no_of_present: { type: Number, required: true },
+    no_of_absent: { type: Number, required: true },
+  },
+  absentees: []
 });
 
 // model for attendance

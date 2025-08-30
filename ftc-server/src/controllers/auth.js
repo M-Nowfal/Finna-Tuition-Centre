@@ -1,7 +1,7 @@
 import studentModel from "../models/studentModel.js";
 import staffModel from "../models/staffModel.js";
+import facultyModel from "../models/facultyModel.js";
 import bcryptjs from "bcryptjs";
-import isValidStaffNumber from "../helpers/checkStaff.js";
 
 // api/auth/login/:role
 export const loginAuthentication = async (req, res, next) => {
@@ -32,11 +32,12 @@ export const loginAuthentication = async (req, res, next) => {
   }
 };
 
-// api/staff/registration post-method
+// api/auth/registration post-method
 export const registerStaff = async (req, res, next) => {
   try {
     const { name, phone, email, password } = req.body;
-    if (!isValidStaffNumber(phone))
+    const faculty = await facultyModel.findOne({ number: Number(phone) });
+    if (!faculty && phone != process.env.ADMIN_NUMBER)
       return res.status(409).json({ error: "You are not allowed to register as Staff" })
     const staff = await staffModel.findOne({ $or: [{ phone }, { email }] });
     if (staff)
@@ -48,6 +49,66 @@ export const registerStaff = async (req, res, next) => {
       name, phone, email, password: hashedPassword, staff_id
     });
     return res.status(201).json({ message: "Staff created", staff_id });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// api/auth/forgot-password post-method
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { phone, staff_id } = req.body;
+    const staff = await staffModel.findOne({ phone, staff_id });
+    if (!staff) 
+      return res.status(404).json({ error: "Staff not found with the phone or staff-id" });
+    res.status(200).json({ id: staff._id });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// api/staff/reset-password post-method
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { staff_id, password } = req.body;
+    const staff = await staffModel.findById(staff_id);
+    if (!staff) 
+      return res.status(404).json({ error: "Staff not found" });
+    const hashedPassword = await bcryptjs.hash(password, await bcryptjs.genSalt(10));
+    await staffModel.findByIdAndUpdate(staff_id, {
+      $set: { password: hashedPassword }
+    });
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// api/auth/add-admin post-method
+export const addAdmin = async (req, res, next) => {
+  try {
+    const {staffId} = req.body;
+    const staff = await staffModel.findOne({ staff_id: staffId });
+    if (!staff) 
+      return res.status(404).json({ error: "Staff not found" });
+    await staffModel.findOneAndUpdate({ staff_id: staffId }, {
+      $set: { admin: true }
+    });
+    res.status(200).json({ message: "New Admin Added" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// api/auth/add-staff post-method
+export const addStaff = async (req, res, next) => {
+  try {
+    const { staffNumber } = req.body;
+    const faculty = await facultyModel.findOne({ number: staffNumber });
+    if (faculty) 
+      return res.status(400).json({ error: "Staff already added" });
+    await facultyModel.create({ number: staffNumber });
+    res.status(201).json({ message: "Staff Added" });
   } catch (err) {
     next(err);
   }
